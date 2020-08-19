@@ -1,0 +1,51 @@
+@import './variables.scss';
+@import './mixin.scss';
+
+html,
+body .app {
+  color: #333333;
+  font-family: Arial, Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', Tohoma, sans-serif;
+  // background-color: $background-color;
+  min-height: 100vh;
+  font-size: 3.5vw;
+}
+body{
+  
+}
+html {
+  min-height: 100%;
+  background-color: #F1F1F1;
+}
+
+p{
+  margin: 0;
+}
+a{
+  color:#333;
+}
+
+.app-container {
+  padding-bottom: 70px;
+  min-height: 100vh;
+}
+
+
+// #region overrides
+.app {
+  .van-nav-bar {
+    background-color: $cl-blue;
+  }
+
+  .van-nav-bar__title {
+    color: #fff;
+  }
+  .van-nav-bar__right {
+    color: #fff;
+  }
+
+  .van-nav-bar .van-icon {
+    color: #fff;
+  }
+}
+
+// #endregion overrides

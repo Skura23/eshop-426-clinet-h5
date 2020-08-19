@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge,chrome=1"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  >
+  <link
+    rel="icon"
+    href="<%= BASE_URL %>favicon.ico"
+  >
+  <link
+    rel="stylesheet"
+    href="http://at.alicdn.com/t/font_1863414_lrcz0uhxb2h.css"
+  >
+  <!-- <% for (var i in
+      htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
+      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
+      <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet" />
+	  <% } %> -->
+  <title><%= webpackConfig.name %></title>
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled. Please enable it
+      to continue.</strong>
+  </noscript>
+  <div id="app"></div>
+  <!-- 使用CDN加速的JS文件，配置在vue.config.js下 -->
+  <!-- <% for (var i in
+      htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
+      <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+    <% } %> -->
+  <!-- built files will be auto injected -->
+
+  <script>
+    // let href = window.location.href;
+    // if (href.includes("?code")) { //url包括 com/?code 证明为从微信跳转回来的
+    //   var url = href.substring(0, href.length - 2); //vue自动在末尾加了 #/ 符号，截取去掉
+    //   var jingPosit = url.indexOf("/mall"); //获取域名结束的位置
+    //   var urlLeft = url.substring(0, jingPosit); //url左侧部分
+    //   var urlRight = url.substring(jingPosit, url.length); //url右侧部分
+    //   console.log(urlLeft, urlRight, 'url');
+    //   window.location = urlLeft + "#/" + urlRight; //拼接跳转
+    // }
+    
+    let href = window.location.href;
+    let arr = href.split('?')
+
+    // 如果无#, 重新跳转到带#地址
+    if (href.includes("?code") && !arr[0].includes("#")) {
+      arr[0] = arr[0] + '#'
+      let url = location.origin + '/#' + location.pathname + location.search
+      window.location.href = url
+    }
+  </script>
+</body>
+
+</html>
