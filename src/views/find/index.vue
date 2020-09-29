@@ -6,12 +6,14 @@
       width="100%"
       alt=""
     >
-    <van-tabs @change="changeTab" v-model="active">
+    <van-tabs
+      @change="changeTab"
+      v-model="active"
+    >
       <van-tab
         v-for="(item, index) in tabList"
         :key="index"
         :title="item.class_name"
-        
         sticky
       >
         <!-- {{item}} -->
@@ -83,7 +85,10 @@
                 v-for="(item, index) in item.like_top_10"
                 :key="index"
               />
-              <span style="vertical-align: super;" v-if="item.like_num != 0">{{item.like_num}}人赞</span>
+              <span
+                style="vertical-align: super;"
+                v-if="item.like_num != 0"
+              >{{item.like_num}}人赞</span>
             </div>
             <div class="fr">
 
@@ -96,11 +101,15 @@
               <van-icon
                 name="share"
                 class="font16 ml5"
+                @click="f_shareMask = true"
               />
             </div>
           </div>
         </div>
-        <div class="_comments borr clearfix mt10" v-if="item.comment_top_5.length">
+        <div
+          class="_comments borr clearfix mt10"
+          v-if="item.comment_top_5.length"
+        >
           <div
             v-for="(item, index) in item.comment_top_5"
             :key="index"
@@ -151,6 +160,16 @@
         </div>
       </div>
     </van-list>
+
+    <div
+      class="wxtip"
+      id="JweixinTip"
+      v-show="f_shareMask"
+      @click="f_shareMask = false"
+    >
+      <span class="wxtip-icon"></span>
+      <p class="wxtip-txt">点击右上角...分享</p>
+    </div>
   </div>
 </template>
 
@@ -170,7 +189,8 @@
   export default {
     data() {
       return {
-        username:'',
+        f_shareMask: false,
+        username: '',
         comment: '',
         tabList: [{
           class_name: '最新',
@@ -189,7 +209,7 @@
 
     computed: {},
     created() {
-      this.username = Cookies.get('eshop-426-client-h5_userinfo')
+      this.username = JSON.parse(Cookies.get('eshop-426-client-h5_userinfo')).member_name
       api.cases_class_list({}).then((res) => {
         this.tabList = this.tabList.concat(res.data.list)
       })
@@ -199,6 +219,9 @@
     },
 
     methods: {
+      // toShare() {
+
+      // },
       prevImg(imgs, index) {
         ImagePreview({
           images: imgs,
@@ -230,6 +253,10 @@
         })
       },
       addComment(item) {
+        if (item.l_comment == '' || item.l_comment == undefined) {
+          Toast('评论不能为空')
+          return
+        }
         item.l_dised = true
         api.auth_case_comment({
           case_id: item.case_id,
@@ -241,7 +268,7 @@
             Toast.success('评论成功');
             item.comment_top_5.unshift({
               object_name: this.username,
-              comment: item.l_comment
+              comment: '评论审核中'
             })
           } else {
             Toast.fail('评论失败');
@@ -278,6 +305,35 @@
   scoped
 >
   .app-container.page-find {
+    .wxtip {
+      background: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 998;
+      /* display: none; */
+    }
+
+    .wxtip-icon {
+      width: 52px;
+      height: 67px;
+      background: url(../../assets/imgs/weixin-tip.png) no-repeat;
+      display: block;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+
+    .wxtip-txt {
+      margin-top: 107px;
+      color: #fff;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
     .van-tab--active {
       font-size: 4.3vw;
     }

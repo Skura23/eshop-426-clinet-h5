@@ -9,6 +9,7 @@
       default-tag-text="默认"
       @add="onAdd"
       @edit="onEdit"
+      @click-item="onSelect"
     />
   </div>
 </template>
@@ -27,6 +28,7 @@
       return {
         chosenAddressId: '1',
         localList: [],
+        pageIsfrom: ''
         // disabledList: [{
         //   id: '3',
         //   name: '王五',
@@ -44,14 +46,36 @@
         this.reBuildList()
       })
     },
-    mounted() {},
+    mounted() {
+      console.log(this.$route, this.$router, 'router');
+    },
+    
+    beforeRouteEnter(to, from, next) {
+      // this.pageIsfrom = from;
+      console.log(this, from, 'beforeRouteEnter');
+      next((vm) => {
+        vm.pageIsfrom = from.name
+      })
+    },
+
+
 
     methods: {
+      onSelect(item, idx) {
+        if (this.pageIsfrom == 'my-settlement') {
+          this.$store.commit('setCurAddr', {
+            name: item.address,
+            id: item.id,
+          })
+          this.$router.back()
+        }
+
+      },
       reBuildList() {
         let arr = []
         for (let i = 0; i < this.localList.length; i++) {
           let elem = this.localList[i];
-          let obj=utils.renameKeyName(elem, ['receiver_id', 'receipt_name',
+          let obj = utils.renameKeyName(elem, ['receiver_id', 'receipt_name',
             'receipt_phone',
             'receipt_address', 'is_default'
           ], [
@@ -61,7 +85,7 @@
             'address',
             'isDefault'
           ])
-          obj.isDefault = obj.isDefault==1 ? true:false
+          obj.isDefault = obj.isDefault == 1 ? true : false
           arr.push(obj)
         }
         this.localList = arr

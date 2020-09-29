@@ -19,6 +19,7 @@
     rel="stylesheet"
     href="http://at.alicdn.com/t/font_1863414_lrcz0uhxb2h.css"
   >
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
   <!-- <% for (var i in
       htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
       <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style" />
@@ -57,7 +58,7 @@
     // 如果无#, 重新跳转到带#地址
     if (href.includes("?code") && !arr[0].includes("#")) {
       arr[0] = arr[0] + '#'
-      let url = location.origin + '/#' + location.pathname + location.search
+      let url = location.origin + location.pathname + '#' + location.search
       window.location.href = url
     }
   </script>

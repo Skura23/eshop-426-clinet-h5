@@ -28,6 +28,7 @@
         <div class="_in">
           <div
             class="_l _d"
+            v-show="firstTwo[0].goods_name"
             @click="$router.push(`/mall/detail?type=seckill&goods_id=${firstTwo[0].goods_id}`)"
           >
             <div
@@ -66,6 +67,7 @@
           </div>
           <div
             class="_r _d"
+            v-show="firstTwo[1].goods_name"
             @click="$router.push(`/mall/detail?type=seckill&goods_id=${firstTwo[1].goods_id}`)"
           >
             <div
@@ -121,7 +123,10 @@
       >
         <!-- thumb goods(title total optiontitle price) -->
 
-        <div class="_m" @click="$router.push(`/mall/detail?type=seckill&goodsid=${item.goods_id}`)">
+        <div
+          class="_m"
+          @click="$router.push(`/mall/detail?type=seckill&goodsid=${item.goods_id}`)"
+        >
           <div class="_l">
             <van-image
               width="20vw"
@@ -244,10 +249,14 @@
           if (res.code == 9999) {
             if (this.page == 1) {
               this.globalCounttime = res.data.end_time * 1000 - (+new Date())
-              this.dataList = res.data.list
-
-              this.firstTwo = [JSON.parse(JSON.stringify(this.dataList[0])), JSON.parse(JSON.stringify(this
-                .dataList[1]))]
+              this.dataList = res.data.list || []
+              if (this.dataList[0]) {
+                this.firstTwo[0] = JSON.parse(JSON.stringify(this.dataList[0]))
+              }
+              if (this.dataList[1]) {
+                this.firstTwo[1] = JSON.parse(JSON.stringify(this.dataList[1]))
+              }
+              // this.firstTwo = [JSON.parse(JSON.stringify(this.dataList[0])), JSON.parse(JSON.stringify(this.dataList[1]))]
               this.dataList[0] = null
               this.dataList[1] = null
             } else {

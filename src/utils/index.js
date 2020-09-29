@@ -16,7 +16,7 @@ import router from '../router'
  * @param {string} cFormat
  * @returns {string}
  */
- function parseTime(time, cFormat) {
+function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null
   }
@@ -61,7 +61,7 @@ import router from '../router'
  * @param {string} option
  * @returns {string}
  */
- function formatTime(time, option) {
+function formatTime(time, option) {
   if (('' + time).length === 10) {
     time = parseInt(time) * 1000
   } else {
@@ -101,9 +101,9 @@ import router from '../router'
 
 // timestamp to 2018-05-26 14:22:05
 function getFormattedDate(value, onlydate) {
-  var date 
+  var date
   if (value) {
-    date = new Date(value*1000);
+    date = new Date(value * 1000);
   } else {
     date = new Date()
   }
@@ -131,7 +131,7 @@ function getFormattedDate(value, onlydate) {
  * @param {string} url
  * @returns {Object}
  */
- function param2Obj(url) {
+function param2Obj(url) {
   const search = url.split('?')[1]
   if (!search) {
     return {}
@@ -147,7 +147,7 @@ function getFormattedDate(value, onlydate) {
   )
 }
 
-let serialize = function(obj) {
+let serialize = function (obj) {
   var str = [];
   for (var p in obj)
     if (obj.hasOwnProperty(p)) {
@@ -185,7 +185,7 @@ function renameKeyName(obj, oldName, newName) {
 
     delete clone[oldName];
     clone[newName] = keyVal;
-  } else{
+  } else {
     for (let i = 0; i < oldName.length; i++) {
       let elem = oldName[i];
       const keyVal = clone[elem];
@@ -193,7 +193,7 @@ function renameKeyName(obj, oldName, newName) {
       clone[newName[i]] = keyVal;
     }
   }
-  
+
 
   return clone;
 }
@@ -202,9 +202,30 @@ function jsonClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
-function jumpTo(url){
+function jumpTo(url) {
   router.push(url)
 }
+
+// 微信支付相关
+/**
+ * @param  {} obj 支付数据
+ * @param  {} cb 支付成功回调
+ * @param  {} falicb 支付失败回调
+ */
+
+function onBridgeReady(obj, cb, falicb) {
+  WeixinJSBridge.invoke('getBrandWCPayRequest', obj,
+    function (res) {
+      if (res.err_msg == "get_brand_wcpay_request:ok") {
+        // 使用以上方式判断前端返回,微信团队郑重提示：
+        //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+        cb && cb()
+      } else {
+        falicb && falicb()
+      }
+    });
+}
+
 
 
 let utils = {
@@ -216,7 +237,8 @@ let utils = {
   editCb,
   renameKeyName,
   jumpTo,
-  jsonClone
+  jsonClone,
+  onBridgeReady
 }
 
 export default utils;

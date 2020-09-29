@@ -97,6 +97,10 @@
           联盟专区
         </div>
       </div>
+      
+    </div>
+
+    <div class="_nav _nav2">
       <div
         class="_i"
         @click="$router.push('/mall/service')"
@@ -116,6 +120,38 @@
       <div
         class="_i"
         @click="$router.push('/mall/coupon')"
+      >
+        <div>
+          <van-image
+            width="10.3vw"
+            height="10.3vw"
+            fit="cover"
+            :src="require('@/assets/imgs/20.png')"
+          />
+        </div>
+        <div class="">
+          领优惠券
+        </div>
+      </div>
+      <div
+        class="_i"
+        style="opacity:0"
+      >
+        <div>
+          <van-image
+            width="10.3vw"
+            height="10.3vw"
+            fit="cover"
+            :src="require('@/assets/imgs/20.png')"
+          />
+        </div>
+        <div class="">
+          领优惠券
+        </div>
+      </div>
+      <div
+        class="_i"
+        style="opacity:0"
       >
         <div>
           <van-image
@@ -339,8 +375,13 @@
       text-align: center;
       padding: 8.7vw 3.2vw 8vw 3.2vw;
       @include flexbox();
+      justify-content: space-around;
 
       ._i {}
+
+      &._nav2 {
+        padding-top: 0vw;
+      }
     }
 
     ._tabs {

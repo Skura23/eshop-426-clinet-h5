@@ -282,6 +282,15 @@ export const router = [{
     }
   },
   {
+    path: '/my/refund-orders',
+    name: 'my-refund-orders',
+    component: () => import('@/views/my/refund-orders'),
+    meta: {
+      title: '退款/售后',
+      keepAlive: false,
+    }
+  },
+  {
     path: '/my/cart',
     name: 'my-cart',
     component: () => import('@/views/my/cart'),
@@ -378,6 +387,15 @@ export const router = [{
       keepAlive: false,
     }
   },{
+    path: '/my/cashout-detail',
+    name: 'my-cashout-detail',
+    component: () => import('@/views/my/cashout-detail'),
+    meta: {
+      title: '提现详情',
+      keepAlive: false,
+    }
+  },
+  {
     path: '/my/cashout-detail',
     name: 'my-cashout-detail',
     component: () => import('@/views/my/cashout-detail'),

@@ -10,12 +10,31 @@
           />
         </van-cell-group>
       </div>
+      <div class="re _d _d2 mt">
+        <van-cell-group>
+          <van-field
+            v-model="imgCode"
+            placeholder="请输入图形验证码"
+          />
+        </van-cell-group>
+        <div
+          class="v-center _vertibtn ab"
+          :class="{'_dis':!f_canSendCode}"
+          @click="updCodeImgUrl"
+        >
+          <img
+            :src="codeImgUrl"
+            @click="updCodeImgUrl"
+            alt=""
+          >
+        </div>
+      </div>
       <div class="re _d _d1 mt">
         <van-cell-group>
-          <!-- <van-field
-            v-model="value"
-            placeholder="请输入验证码"
-          /> -->
+          <van-field
+            v-model="d_form.code"
+            placeholder="请输入短信验证码"
+          />
         </van-cell-group>
         <div
           class="u-btn v-center _vertibtn ab"
@@ -23,7 +42,7 @@
           @click="getCode"
         >{{f_canSendCode ? '获取验证码' : codeTime+'s'}}</div>
       </div>
-      <p class="_p1 cl-whi re">
+      <p class="_p1 cl-whi re mt10">
         &nbsp;&nbsp;
         <img
           src=""
@@ -35,7 +54,10 @@
           v-show="d_form.read"
           alt
         >
-        <span style="opacity: 0.5;">&nbsp;&nbsp; 我已阅读并接受</span>服务条款
+        <span
+          style="opacity: 0.5;color: #535353"
+          class=" i-b"
+        >&nbsp;&nbsp; 我已阅读并接受服务条款</span>
         <span
           class="ab _mask"
           @click="toggleRead"
@@ -79,26 +101,36 @@
         codeTime: 60,
         timer: {},
         // flag
-        f_canSendCode: true
+        f_canSendCode: true,
+        codeImgUrl: '',
+        imgCode: '',
+        codeImgSuffix: ''
         // f_showNav: false
       };
     },
     created() {
       this.openid = this.$route.query.open_id
+      if (!this.openid) {
+        this.openid = Cookies.get('eshop-426-client-h5_userinfo').open_id
+      }
       console.log('created');
-
 
 
     },
     mounted() {
       console.log('mounted');
-
+      this.updCodeImgUrl()
     },
     updated() {
       console.log('login updated');
 
     },
     methods: {
+      updCodeImgUrl() {
+        this.codeImgSuffix = parseInt(Math.random() *
+          1000000)
+        this.codeImgUrl = globals.curBaseUrl + '/verification_code_cache?image_code=' + this.codeImgSuffix
+      },
       // 获取验证码
       getCode() {
         if (!this.f_canSendCode) {
@@ -106,30 +138,29 @@
         }
         // &mobile=15375222420
         if (!this.d_form.tele) {
-          this.$toasted.show("请填写手机号");
+          Toast("请填写手机号");
           return false;
         }
-        // g.$ajax
-        //   .get(g.url + "&r=account.verifycode&temp=quickLogin&imgcode=0", {
-        //     params: {
-        //       mobile: this.d_form.tele
-        //     }
-        //   })
-        //   .then(res => {
-        //     // handle success
-        //     console.log(res, "verifycode");
-        //     this.disableSend();
-        //     // _list = res.data.result.list;
-        //     // this.d_orderList = pickData(_list);
-        //     // console.log(this.d_orderList);
-        //   })
-        //   .catch(error => {
-        //     // handle error
-        //     console.log(error);
-        //   })
-        //   .then(() => {
-        //     // always executed
-        //   });
+        if (!this.imgCode) {
+          Toast("请输入图形验证码");
+          return false;
+        }
+
+        api.send_phone_message({
+          verify_code: this.imgCode,
+          image_code: this.codeImgSuffix,
+          phone: this.d_form.tele,
+          root_factory_id: 1,
+        }).then((res) => {
+          console.log(res, "verifycode");
+          if (res.code == 9999) {
+            this.disableSend();
+            // this.updCodeImgUrl()
+          } else {
+            Toast(res.info)
+          }
+        })
+
       },
       login() {
         if (!this.loginCheck()) {
@@ -139,35 +170,42 @@
         api.register({
           open_id: this.openid,
           root_factory_id: 1,
-          phone: this.d_form.tele
+          phone: this.d_form.tele,
+          phone_code: this.d_form.code
         }).then((res) => {
-          if (res.data.status == 1) {
-            setToken(res.data.response.token)
-            Cookies.set('eshop-426-client-h5_userinfo', res.data.response)
+          if (res.code == 9999) {
 
-            Toast({
-              message: '注册成功',
-              duration: 1500,
-              onClose: () => {
-                utils.jumpTo('/')
-              }
-            })
-          } else if (res.data.status == 2) {
-            Toast({
-              message: '请选择注册门店',
-              duration: 1500,
-              onClose: () => {
-                utils.jumpTo(`/login/factory-list`)
-                this.$router.push({
-                  path: `./factory-list`,
-                  name: "factory-list",
-                  params: {
-                    page: this,
-                  }
-                })
-              }
-            })
+            if (res.data.status == 1) {
+              setToken(res.data.response.token)
+              Cookies.set('eshop-426-client-h5_userinfo', res.data.response)
+
+              Toast({
+                message: '注册成功',
+                duration: 1500,
+                onClose: () => {
+                  utils.jumpTo('/')
+                }
+              })
+            } else if (res.data.status == 2) {
+              Toast({
+                message: '请选择注册门店',
+                duration: 1500,
+                onClose: () => {
+                  utils.jumpTo(`/login/factory-list`)
+                  this.$router.push({
+                    path: `./factory-list`,
+                    name: "factory-list",
+                    params: {
+                      page: this,
+                    }
+                  })
+                }
+              })
+            }
+          } else {
+            Toast(res.info)
           }
+
         })
       },
       // 切换阅读条款
@@ -177,16 +215,21 @@
       loginCheck() {
         if (!this.d_form.tele) {
           Toast("请填写手机号");
+          return false;
         }
-        // if (!this.d_form.code) {
-        //   this.$toasted.show("请填写验证码");
-        //   return false;
-        // }
+        if (!this.imgCode) {
+          Toast("请填写图形验证码");
+          return false;
+        }
+        if (!this.d_form.code) {
+          Toast("请填写短信验证码");
+          return false;
+        }
+        return true
         // if (!this.d_form.read) {
         //   this.$toasted.show("请同意服务条款");
         //   return false;
         // }
-        return true;
       },
       // 禁用验证码发送
       disableSend() {
@@ -203,6 +246,7 @@
         if (newVal == 0) {
           clearInterval(this.timer);
           this.f_canSendCode = true;
+          this.codeTime = 60
         }
       },
       chosenFacId(newVal, oldVal) {
@@ -212,14 +256,17 @@
             open_id: this.openid,
             root_factory_id: 1,
             phone: this.d_form.tele,
-            factory_id: this.chosenFacId
+            factory_id: this.chosenFacId,
+            phone_code: this.d_form.code
           }).then((res) => {
             if (res.code == 9999) {
+              setToken(res.data.response.token)
+              Cookies.set('eshop-426-client-h5_userinfo', res.data.response)
               Toast({
                 message: '登录成功!',
                 duration: 1200,
                 onClose: () => {
-                  utils.jumpTo('/mall')
+                  this.$router.replace(`/mall`)
                 }
               })
             } else {
@@ -236,6 +283,14 @@
   scoped
   lang='scss'
 >
+  .login {
+    input::placeholder {
+      color: #535353;
+    }
+
+  }
+
+
   $mt: 3vw;
 
   .mt {
@@ -267,6 +322,21 @@
           color: #fff;
         }
 
+        &._d2 {
+          ._vertibtn {
+
+            font-size: 0;
+            right: 0;
+            height: 100%;
+            width: 30vw;
+
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+
         &._d1 {
           ._vertibtn {
             top: 47.1%;
@@ -289,7 +359,7 @@
 
         ::placeholder {
           /* Most modern browsers support this now. */
-          color: #fff;
+          /* color: #fff; */
         }
       }
 

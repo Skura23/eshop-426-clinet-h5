@@ -97,6 +97,9 @@
           联盟专区
         </div>
       </div>
+
+    </div>
+    <div class="_nav _nav2">
       <div
         class="_i"
         @click="$router.push('/mall/service')"
@@ -116,6 +119,38 @@
       <div
         class="_i"
         @click="$router.push('/mall/coupon')"
+      >
+        <div>
+          <van-image
+            width="10.3vw"
+            height="10.3vw"
+            fit="cover"
+            :src="require('@/assets/imgs/20.png')"
+          />
+        </div>
+        <div class="">
+          领优惠券
+        </div>
+      </div>
+      <div
+        class="_i"
+        style="opacity:0"
+      >
+        <div>
+          <van-image
+            width="10.3vw"
+            height="10.3vw"
+            fit="cover"
+            :src="require('@/assets/imgs/20.png')"
+          />
+        </div>
+        <div class="">
+          领优惠券
+        </div>
+      </div>
+      <div
+        class="_i"
+        style="opacity:0"
       >
         <div>
           <van-image
@@ -193,7 +228,7 @@
 
             <div class="_r">
               <div class="font16">
-                  已砍{{item.bargain_price}}元，仅差{{item.surplus_price}}元
+                已砍{{item.bargain_price}}元，仅差{{item.surplus_price}}元
               </div>
               <div
                 class="_pbar borr re mt"
@@ -209,13 +244,13 @@
                 style="margin-top:7vw"
               >
                 <van-count-down :time="item.end_time * 1000 - (+new Date())">
-                    <template v-slot="timeData">
-                      <span class="borr tc _num">{{ timeData.hours }}</span> :
-                      <span class="borr tc _num">{{ timeData.minutes }}</span> :
-                      <span class="borr tc _num">{{ timeData.seconds }}</span>
-                      <div class="i-b _end ml5">后结束</div>
-                    </template>
-                  </van-count-down>
+                  <template v-slot="timeData">
+                    <span class="borr tc _num">{{ timeData.hours }}</span> :
+                    <span class="borr tc _num">{{ timeData.minutes }}</span> :
+                    <span class="borr tc _num">{{ timeData.seconds }}</span>
+                    <div class="i-b _end ml5">后结束</div>
+                  </template>
+                </van-count-down>
               </div>
               <div class="_btn mt10 font18">
                 <van-button
@@ -334,16 +369,17 @@
           :key="index"
           @click="toDetail(item)"
         >
-          <div class="ab _top-right tc2 font10">
+          <div class="ab _top-right tc2 font10" v-show="item.goods_type">
             <img
               src="@/assets/imgs/23.png"
               class="ab"
               width="100%"
               style="z-index:-1"
               alt=""
+
             >
             <!--  type todo -->
-            砍价商品
+            {{item.goods_type}}
           </div>
           <van-image
             width="100%"
@@ -425,6 +461,7 @@
 
     computed: {},
     created() {
+      
       api.shop_goods_class({}).then((res) => {
         this.tabList = [{
           class_1: "",
@@ -510,8 +547,13 @@
       text-align: center;
       padding: 8.7vw 3.2vw 8vw 3.2vw;
       @include flexbox();
+      justify-content: space-around;
 
       ._i {}
+
+      &._nav2 {
+        padding-top: 0vw;
+      }
     }
 
     ._tabs {
@@ -635,6 +677,7 @@
 
           ._d {
             width: 41%;
+
             ._time {
               font-size: 2.5vw;
 

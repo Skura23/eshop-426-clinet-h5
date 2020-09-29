@@ -94,7 +94,14 @@
             @click="likeCard"
           >
             <div class="_d0-r _d0-r-t">
-              <van-icon name="good-job-o" />
+              <van-icon
+                name="good-job-o"
+                v-if="dataset.is_like==2"
+              />
+              <van-icon
+                name="good-job"
+                v-if="dataset.is_like==1"
+              />
             </div>
             <div class="_d0-r _d0-r-b">
               点赞 {{dataset.like_num}}
@@ -202,7 +209,10 @@
       :style="{ height: '30%' }"
     >
       <div class="_card-share">
-        <div class="_l">
+        <div
+          class="_l"
+          @click="showShare=false;showShareGuide = true"
+        >
           <div class="_t">
             <van-image
               width="11vw"
@@ -254,20 +264,29 @@
       />
     </div>
 
-    <van-popup v-model="posterShow" class="tc">
+    <van-popup
+      v-model="posterShow"
+      class="tc"
+    >
       <img
         :src="posterUrl"
         alt=""
         style="width:70vw;"
       >
-      <van-button type="info" class="mb10">长按图片保存</van-button>
+      <van-button
+        type="info"
+        class="mb10"
+      >长按图片保存</van-button>
     </van-popup>
+
+    <wx-share-guide :show.sync="showShareGuide"></wx-share-guide>
   </div>
 </template>
 
 <script>
   import globals from '@/utils/globals' // get token from cookie
   import utils from '@/utils/index' // get token from cookie
+  import WxShareGuide from '@/components/WxShareGuide'
 
   import api from '@/api/api'
   import {
@@ -282,10 +301,14 @@
         cardShowAll: false,
         posterShow: false,
         posterUrl: '',
+        cardIslike: false,
+        showShareGuide: false,
       }
 
     },
-
+    components: {
+      WxShareGuide
+    },
     computed: {},
     created() {
 
@@ -321,6 +344,7 @@
           auth_code: this.dataset.auth_code
         }).then((res) => {
           if (res.code == 9999) {
+            this.dataset.is_like = 1
             this.dataset.like_num += 1
           }
         })

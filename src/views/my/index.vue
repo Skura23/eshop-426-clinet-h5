@@ -26,13 +26,13 @@
               class="ab _edit"
             >
           </div>
-          <div class="_r">
+          <!-- <div class="_r">
             <img
               src="@/assets/imgs/45.png"
               style="width:10.3vw"
               alt=""
             >
-          </div>
+          </div> -->
 
         </div>
 
@@ -92,6 +92,7 @@
           <van-col span="6">
             <img
               src="@/assets/imgs/27.png"
+              @click="jumpTo('refund-orders')"
               alt=""
             >
             <div class="mt5">退款 售后</div>
@@ -203,14 +204,14 @@
         >
           <!-- 使用 title 插槽来自定义标题 -->
           <template #title>
-            <span class="custom-title" >积分商城</span>
-            <img
+            <span class="custom-title">积分商城</span>
+            <!-- <img
               src="@/assets/imgs/42.png"
               class="ml10"
               style="width:3.5vw"
               alt=""
             >
-            <span class="font12"> 封印成功领取“无门槛优惠券···</span>
+            <span class="font12"> 封印成功领取“无门槛优惠券···</span> -->
           </template>
           <template>
             <span @click="jumpTo('credit')">更多</span>
@@ -259,13 +260,13 @@
           <!-- 使用 title 插槽来自定义标题 -->
           <template #title>
             <span class="custom-title">免费领</span>
-            <img
+            <!-- <img
               src="@/assets/imgs/42.png"
               class="ml10"
               style="width:3.5vw"
               alt=""
             >
-            <span class="font12"> 封印成功领取“无门槛优惠券···</span>
+            <span class="font12"> 封印成功领取“无门槛优惠券···</span> -->
           </template>
         </van-cell>
         <div class="_cont mt10">
@@ -328,7 +329,7 @@
           </van-col>
           <van-col
             span="6"
-            @click="jumpTo('service')"
+            @click="jumpToServ"
           >
             <img
               src="@/assets/imgs/37.png"
@@ -356,18 +357,23 @@
   export default {
     data() {
       return {
-
+        serviceUrl: ''
       }
 
     },
 
     computed: {},
     created() {
-
+      api.shop_card_detail({}).then((res) => {
+        this.serviceUrl = `/card/chat?auth_code=${res.data.auth_code}`
+      })
     },
     mounted() {},
 
     methods: {
+      jumpToServ() {
+        this.$router.push(this.serviceUrl)
+      },
       jumpTo(str, flag0) {
 
         if (str == 'bussi') {
@@ -375,7 +381,14 @@
         }
         if (str == 'orders') {
           // this.$router.push('/my/orders')
-          utils.jumpTo('/my/orders')
+          if (flag0) {
+            utils.jumpTo(`/my/orders?orderType=${flag0}`)
+          } else {
+            utils.jumpTo('/my/orders')
+          }
+        }
+        if (str == 'refund-orders') {
+          utils.jumpTo('/my/refund-orders')
         }
         if (str == 'seckill') {
           // this.$router.push('/my/orders')
@@ -413,7 +426,7 @@
           // this.$router.push('/my/orders')
           utils.jumpTo('/credit/index')
         }
-        
+
       },
     }
   }

@@ -103,11 +103,13 @@
           case_id: this.case_id
         }).then((res) => {
           let images = res.data.image
-          this.fileList = images.map((v) => {
-            return {
-              url: v
-            }
-          })
+          if (images) {
+            this.fileList = images.map((v) => {
+              return {
+                url: v
+              }
+            })
+          }
           this.message = res.data.content
           let class_id = res.data.class_id
           this.cate = {

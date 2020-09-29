@@ -12,7 +12,7 @@
         <van-col span="12">
           <van-button
             type="warning"
-            to="/credit/ex-list"
+            to="/credit/credit-list"
           >积分明细</van-button>
         </van-col>
         <van-col span="12">
@@ -82,7 +82,7 @@
                 style="padding:1.1vw 5vw;"
                 @click="toBuy(item)"
               >
-                366积分兑换
+                {{item.integral}}积分兑换
               </div>
             </div>
           </van-grid-item>
@@ -149,19 +149,15 @@
         utils.jumpTo(`/mall/bargain-detail?bargain_id=${data.bargain_id}`)
       },
       toBuy(item) {
-        Toast.loading({
-          message: '加载中...',
-          forbidClick: true,
-        });
-        api.bargain_create({
-          goods_id: item.goods_id
-        }).then((res) => {
-          Toast.clear()
-          if (res.code == 9999) {
-            utils.jumpTo(`/mall/bargain-detail?bargain_id=${res.data.bargain_id}`)
-          } else {
-            Toast(res.info)
-          }
+        let obj = {
+          goods_id: item.goods_id,
+          option_id: item.option_id,
+          type: 'credit'
+        }
+        this.$router.push({
+          path: `/mall/settlement`,
+          name: "my-settlement",
+          query: obj
         })
 
       },

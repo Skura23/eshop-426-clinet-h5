@@ -8,12 +8,17 @@
       :name="$route.name"
       v-show="!$route.meta.noTopbar"
     ></TopBar>
+    <!-- <div
+      class=""
+      @click="test"
+    >tap</div> -->
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
     <!-- tabbar -->
     <TabBar></TabBar>
+
 
   </div>
 </template>
@@ -41,6 +46,11 @@
       // setTimeout(() => {
       //   console.log(this.$route.name);
       // }, 1000);
+    },
+    methods: {
+      // test() {
+      //   this.$router.go(0)
+      // },
     },
     created() {
       // 如果地址栏带code参数则加上#后重新跳转
@@ -86,7 +96,8 @@
           // 如果无#, 重新跳转到带#地址
           if (!arr[0].includes("#")) {
             arr[0] = arr[0] + '#'
-            let url = location.origin + '/#' + location.pathname + location.search
+            let url = location.origin + location.pathname + '#' + location.search
+
             window.location.href = url
           } else {
             // 如果有#, 则获取code
@@ -98,11 +109,19 @@
               wei_xin_code: obj.code,
             }).then((res) => {
               if (res.data.shop_code == 3100) {
-                utils.jumpTo(`/login?open_id=${res.data.open_id}`)
+                console.log('this.$router.replace to login');
+                this.$router.replace(`/login?open_id=${res.data.open_id}`)
               } else {
                 // 登陆成功
                 setToken(res.data.response.token)
-                Cookies.set('eshop-426-client-h5_userinfo', res.data.response)
+                console.log(res.data, 'wei_xin_check_login');
+                // alert(JSON.stringify(res.data))
+                Cookies.set('eshop-426-client-h5_userinfo', {
+                  ...res.data.response,
+                  open_id: res.data.response.open_id
+                })
+                // 获取token后刷新页面, 否则会出现其他接口无token异步执行的问题
+                this.$router.go(0)
               }
 
             })

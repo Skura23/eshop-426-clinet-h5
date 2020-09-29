@@ -331,6 +331,7 @@
         fromOrderNo: '',
         groupList: [],
         type: '',
+        buyType: '',
         active: 0,
         goodsid: '',
         goodsdata: {},
@@ -357,15 +358,15 @@
     },
 
     watch: {
-      // 如果 `question` 发生改变，这个函数就会运行
-      skuPopShow: function (newQuestion, oldQuestion) {
-        if (!newQuestion) {
+      skuPopShow: function (newval, oldval) {
+        if (!newval) {
           if (this.type == 'nomal') {
             this.setPrice('normal')
           }
           if (this.type == 'group') {
             this.fromOrderNo = ''
           }
+          this.buyType = ''
 
         }
       }
@@ -565,6 +566,7 @@
       onClickPrepay() {
         this.quota = 1
         this.setPrice('prepay')
+        this.buyType = 'prepay'
         this.skuPopShow = true
       },
       onClickGroupBuy() {
@@ -579,7 +581,8 @@
           goods_share_id: this.goodsdata.goods_share_id,
           option_id: data.selectedSkuComb.id,
           num: data.selectedNum,
-          type: this.type
+          type: this.type,
+          buyType: this.buyType
         }
         this.$router.push({
           path: `/mall/settlement`,

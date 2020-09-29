@@ -1,7 +1,7 @@
 <!-- home -->
 <template>
   <div class="app-container page-order">
-    <van-tabs
+    <!-- <van-tabs
       @change="changeTab"
       v-model="active"
     >
@@ -13,9 +13,9 @@
       >
 
       </van-tab>
-    </van-tabs>
+    </van-tabs> -->
 
-    <div class="mt10">
+    <!-- <div class="mt10">
       <van-search
         v-model="keyword"
         placeholder="请输入搜索关键词"
@@ -23,7 +23,7 @@
         @clear="clearSear"
         @search="sear"
       />
-    </div>
+    </div> -->
 
     <van-list
       v-model="listLoading"
@@ -83,11 +83,7 @@
           <div class="_b-b">
             <div></div>
             <div>
-              <div
-                class="u-btn _btn0"
-                @click="btn0Click(item)"
-                v-show="item.status != 2"
-              >{{textMap[item.status].btn}}</div>
+              <div class="u-btn _btn0">提醒发货</div>
               <div class="u-btn _btn1">查看订单</div>
             </div>
           </div>
@@ -128,19 +124,19 @@
           val: 4,
         }, ],
         textMap: {
-          1: {
+          0: {
             desc: '等待买家付款',
             btn: '付款'
           },
-          2: {
+          1: {
             desc: '等待卖家发货',
             btn: '修改地址'
           },
-          3: {
+          2: {
             desc: '卖家已发货',
             btn: '确认收货'
           },
-          4: {
+          3: {
             desc: '订单已完成',
             btn: '评价'
           },
@@ -177,35 +173,6 @@
     },
 
     methods: {
-      btn0Click(item) {
-        if (item.status == 1) {
-          api.factory_order_pay({
-            order_no: item.order_no
-          }).then((res) => {
-            this.disabled = false
-
-            if (typeof WeixinJSBridge == "undefined") {
-              if (document.addEventListener) {
-                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-              } else if (document.attachEvent) {
-                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-              }
-            } else {
-              utils.onBridgeReady(res.data, () => {
-                Toast('支付成功')
-              }, () => {
-                Toast('支付失败')
-              })
-            }
-            // if (res.code == 9999) {
-            //   Toast('支付成功')
-            // } else {
-            //   Toast('支付失败')
-            // }
-          })
-        }
-      },
       clearSear() {
         this.changeTab()
       },
@@ -222,12 +189,11 @@
         this.loadList()
       },
       loadList() {
-        api.member_order_list({
-          status: this.active,
-          keywords_like: this.keyword,
+        api.order_refund_list({
           page: this.page
         }).then((res) => {
           // loadListCb(res) {
+          
           if (res.code == 9999) {
             this.page++
             this.total = res.data.total

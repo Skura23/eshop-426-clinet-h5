@@ -104,6 +104,7 @@ let apiList = [
   "order_check_create|shop",
   "order_pay|shop",
   "member_order_list|member",
+  "factory_order_pay|shop",
   // 砍价
   "bargain_goods_list|marketing",
   "bargain_create|marketing",
@@ -165,6 +166,10 @@ let apiList = [
   "integral_order_check|shop",
   "integral_order_create|shop",
   "member_integral_order_list|member",
+  // 退货
+  "order_refund_create|shop",
+  "order_refund_check|shop",
+  "order_refund_list|shop",
 
 
   "group_order_list|shop",
@@ -177,6 +182,8 @@ let apiList = [
   "order_group_create|shop",
   "join_group_order_list|shop",
   "factory_request|member",
+  "order_prepay_create|shop",
+  "send_phone_message"
 ]
 
 // 调用方法: api["class_create|integral"]

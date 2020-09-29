@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="_b">
-        入账中 <span class="font20">￥{{dataset.entering_amount}} ></span>
+        入账中 <span class="font20">￥{{dataset.entering_amount}}</span>
       </div>
     </div>
     <div class="m-card _d2">

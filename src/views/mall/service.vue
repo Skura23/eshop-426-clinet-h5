@@ -14,6 +14,9 @@
       <van-search
         v-model="query"
         placeholder="搜索／手机号后四位／名字"
+        :clearable="true"
+        @clear="clearSear"
+        @search="sear"
       />
     </div>
 
@@ -84,6 +87,14 @@
     mounted() {},
 
     methods: {
+      clearSear() {
+        // this.query=''
+      },
+      sear() {
+        this.dataList = []
+        this.page = 1
+        this.getList()
+      },
       getList() {
         api.services_staff_list({
           keywords_like: this.query
