@@ -1,6 +1,6 @@
 <!-- home -->
 <template>
-  <div class="app-container page-">
+  <div class=" page-">
     <div
       class="wxtip"
       id="JweixinTip"

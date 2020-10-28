@@ -52,7 +52,12 @@
       //   this.$router.go(0)
       // },
     },
+    
     created() {
+
+      // 设置全局分享
+      this.$wxShare.wxShowMenu();
+      
       // 如果地址栏带code参数则加上#后重新跳转
 
       // api.authorization({
@@ -107,6 +112,7 @@
             api.wei_xin_check_login({
               root_factory_id: 1,
               wei_xin_code: obj.code,
+              referrer_id:obj.mid
             }).then((res) => {
               if (res.data.shop_code == 3100) {
                 console.log('this.$router.replace to login');
@@ -120,6 +126,7 @@
                   ...res.data.response,
                   open_id: res.data.response.open_id
                 })
+                this.$wxShare.wxShowMenu();
                 // 获取token后刷新页面, 否则会出现其他接口无token异步执行的问题
                 this.$router.go(0)
               }

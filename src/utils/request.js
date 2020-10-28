@@ -17,7 +17,7 @@ const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
-const loginApis = ['wei_xin_check_login', 'authorization', 'register', 'factory_list', 'factory_register', 'send_phone_message']
+const loginApis = ['wei_xin_check_login', 'authorization', 'register', 'factory_list', 'factory_register', 'send_phone_message', "js_api",]
 
 // request interceptor
 service.interceptors.request.use(

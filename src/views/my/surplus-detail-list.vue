@@ -1,29 +1,6 @@
 <!-- home -->
 <template>
-  <div class="app-container page-order">
-    <van-tabs
-      @change="changeTab"
-      v-model="active"
-    >
-      <van-tab
-        v-for="(item, index) in tabList"
-        :key="index"
-        :title="item.text"
-        :name="item.val"
-      >
-
-      </van-tab>
-    </van-tabs>
-
-    <!-- <div class="mt10">
-      <van-search
-        v-model="keyword"
-        placeholder="请输入搜索关键词"
-        :clearable="true"
-        @clear="clearSear"
-        @search="sear"
-      />
-    </div> -->
+  <div class="app-container page-my-surplus-detail-list">
 
     <van-list
       v-model="listLoading"
@@ -32,63 +9,20 @@
       error-text="请求失败，点击重新加载"
       @load="loadList"
     >
-      <div
-        class="_card2 m-card f14 bac-whi"
+      <van-cell
+        :title="item.remark"
+        :value="item.symbol + item.amount"
+        size="large"
+        :label="item.add_time"
         v-for="(item, index) in dataList"
         :key="index"
+        @click="toDetail(item)"
       >
-        <!-- thumb goods(title total optiontitle price) -->
-        <div class="_t">
-          <div class="_l">
-
-            <span>{{item.factory_name}}</span>;
-
-          </div>
-          <div class="_r cl-oran">{{item.status_desc}}</div>
-        </div>
-        <div
-          class="_m"
-          v-for="(goods, index) in item.goods"
-          :key="index"
-        >
-          <div class="_l">
-            <van-image
-              width="20vw"
-              height="20vw"
-              fit="cover"
-              style="border-radius:3vw;"
-              :src="goods.goods_image[0]"
-            />
-          </div>
-          <div class="_mid">
-            <p
-              class="_p0"
-              style="marginTop:0;"
-            >{{goods.goods_name}}</p>
-            <!-- <p class="_p1">规格:{{goods.option_name && goods.option_name.join()}}</p> -->
-            <p class="_p2 cl-oran font10">七天无理由退换</p>
-          </div>
-          <div class="_r">
-            <p>
-              ¥{{goods.price}}
-            </p>
-            <p class="mt10">×{{goods.num}}</p>
-          </div>
-        </div>
-        <div class="_b">
-          <div class="_b-t">
-            <!-- <span>共{{}}件商品 </span> -->
-            合计：￥{{item.real_amount}}
-          </div>
-          <div class="_b-b">
-            <div></div>
-            <div>
-              <!-- <div class="u-btn _btn0">提醒发货</div> -->
-              <div class="u-btn _btn1">查看订单</div>
-            </div>
-          </div>
-        </div>
-      </div>
+        <!-- <template>
+          <div class="">2</div>
+          <div class="">1</div>
+        </template> -->
+      </van-cell>
     </van-list>
   </div>
 </template>
@@ -107,20 +41,7 @@
   export default {
     data() {
       return {
-        tabList: [{
-          text: '全部',
-          val: 0,
-        }, {
-          text: '退款中',
-          val: 1,
-        }, {
-          text: '已退款',
-          val: 3,
-        }, {
-          text: '已拒绝',
-          val: 2,
-        }],
-        
+        tabList: [],
         active: 0,
         keyword: '',
         dataList: [],
@@ -141,6 +62,14 @@
     },
 
     methods: {
+      toDetail(item) {
+        this.$router.push({
+          path: `/my/surplus-detail`,
+          name: "my-surplus-detail",
+          query: item
+        })
+
+      },
       clearSear() {
         this.changeTab()
       },
@@ -150,19 +79,16 @@
         this.loadList()
       },
       changeTab(data) {
-
         this.dataList = []
         this.page = 1
         this.keyword = ''
         this.loadList()
       },
       loadList() {
-        api.order_refund_list({
-          page: this.page,
-          refund_status: this.active
+        api.member_dealer_detail({
+          page: this.page
         }).then((res) => {
           // loadListCb(res) {
-          
           if (res.code == 9999) {
             this.page++
             this.total = res.data.total
@@ -190,16 +116,29 @@
   $red: #f90250;
   $cardpad: 4vw;
 
-  .app-container.page-mall {
+  .app-container.page-my-surplus-detail-list {
+
+    background-color: #fff;
+
+    .van-cell {
+      background-color: transparent;
+    }
+
+    .van-cell:not(:last-child)::after {
+      border-bottom: 1px solid #bdbfc3;
+      right: 4vw;
+    }
+
+    ._top-wra {
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      height: 30vw;
+    }
 
     .m-card {
       box-sizing: border-box;
       padding: $cardpad;
       margin-top: 3.5vw;
-
-      width: auto;
-      border-radius: 0;
-      box-shadow: none;
     }
 
     ._card2 {
@@ -220,7 +159,7 @@
         }
 
         ._r {
-          /* color: $red; */
+          color: $red;
         }
       }
 
@@ -243,11 +182,6 @@
             &._p1,
             &._p2 {
               opacity: 0.7;
-            }
-
-            &._p2 {
-              margin-top: 1vw;
-
             }
           }
         }

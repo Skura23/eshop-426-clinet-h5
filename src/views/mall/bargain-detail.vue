@@ -157,25 +157,24 @@
 
     methods: {
       toPay() {
-        api.bargain_order_create({
-          bargain_id: this.bargain_id
-        }).then((res) => {
-          if (res.code == 9999) {
-            if (res.data.status == 1) {
-              api.order_pay({
-                order_no: res.data.order_no
-              }).then((res) => {
+        // api.bargain_order_create({
+        //   bargain_id: this.bargain_id
+        // }).then((res) => {
+        //   if (res.code == 9999) {
+        //     if (res.data.status == 1) {
+        //       api.order_pay({
+        //         order_no: res.data.order_no
+        //       }).then((res) => {
 
-              })
-            } else {
-              Toast('购买成功')
-            }
-          } else {
-            Toast(res.info)
-          }
-
-        })
-
+        //       })
+        //     } else {
+        //       Toast('购买成功')
+        //     }
+        //   } else {
+        //     Toast(res.info)
+        //   }
+        // })
+        this.$router.push(`/my/settlement?type=bargain&bargain_id=${this.bargain_id}`)
       },
       bargain() {
         api.bargain({

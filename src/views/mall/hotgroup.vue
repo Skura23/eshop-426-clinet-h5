@@ -1,196 +1,24 @@
 <!-- home -->
 <template>
-  <div class="app-container page-union">
-    <div class="">
-      <van-search
-        v-model="keyword"
-        placeholder="请输入搜索关键词"
-        :clearable="true"
-        @clear="clearSear"
-        @search="sear"
-      />
-    </div>
+  <div class="app-container page-order page-hotgroup">
 
-    <!-- <van-swipe
-      class="my-swipe mt10"
-      indicator-color="#ff7728"
-      height="70vw"
-    >
-      <van-swipe-item>
-        <van-image
-          width="100%"
-          height="100%"
-          fit="cover"
-          :src="require('@/assets/imgs/78.png')"
-        />
-      </van-swipe-item>
-      <van-swipe-item>
-        <van-image
-          width="100%"
-          height="100%"
-          fit="cover"
-          :src="require('@/assets/imgs/78.png')"
-        />
-      </van-swipe-item>
-
-    </van-swipe>
-
-    <div class="_nav">
-      <div class="_i">
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/16.png')"
-          />
-        </div>
-        <div class="">
-          热团拼购
-        </div>
-      </div>
-      <div
-        class="_i"
-        @click="$router.push('/mall/bargain')"
-      >
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/17.png')"
-          />
-        </div>
-        <div class="">
-          砍出优惠
-        </div>
-      </div>
-      <div
-        class="_i"
-        @click="$router.push('/mall/seckill')"
-      >
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/18.png')"
-          />
-        </div>
-        <div class="">
-          低价秒杀
-        </div>
-      </div>
-      <div
-        class="_i"
-        @click="$router.push('/mall/union')"
-      >
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/19.png')"
-          />
-        </div>
-        <div class="">
-          联盟专区
-        </div>
-      </div>
-      
-    </div>
-
-    <div class="_nav _nav2">
-      <div
-        class="_i"
-        @click="$router.push('/mall/service')"
-      >
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/20.png')"
-          />
-        </div>
-        <div class="">
-          服务专区
-        </div>
-      </div>
-      <div
-        class="_i"
-        @click="$router.push('/mall/coupon')"
-      >
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/20.png')"
-          />
-        </div>
-        <div class="">
-          领优惠券
-        </div>
-      </div>
-      <div
-        class="_i"
-        style="opacity:0"
-      >
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/20.png')"
-          />
-        </div>
-        <div class="">
-          领优惠券
-        </div>
-      </div>
-      <div
-        class="_i"
-        style="opacity:0"
-      >
-        <div>
-          <van-image
-            width="10.3vw"
-            height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/20.png')"
-          />
-        </div>
-        <div class="">
-          领优惠券
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <van-image
-        width="100%"
-        height="35vw"
-        fit="cover"
-        :src="require('@/assets/imgs/78.png')"
-      />
-    </div> -->
+    
 
     <van-tabs
       @change="changeTab"
       v-model="active"
       class="_tabs"
     >
-      <div class="_r ">
+      <!-- <div class="_r ">
         <van-image
           width="5vw"
           height="3.7vw"
           fit="cover"
           :src="require('@/assets/imgs/21.png')"
+          @click="$router.push('/mall/goodslist')"
           class="v-h-center"
-          @click="$router.push('/mall/goodslist?type=union')"
         />
-      </div>
+      </div> -->
       <van-tab
         v-for="(item, index) in tabList"
         :key="index"
@@ -219,16 +47,17 @@
           :key="index"
           @click="toDetail(item)"
         >
-          <div class="ab _top-right tc2 font10">
+          <div class="ab _top-right tc2 font10" v-show="item.goods_type">
             <img
               src="@/assets/imgs/23.png"
               class="ab"
               width="100%"
               style="z-index:-1"
               alt=""
+
             >
             <!--  type todo -->
-            砍价商品
+            {{item.goods_type}}
           </div>
           <van-image
             width="100%"
@@ -274,7 +103,7 @@
       </van-grid>
     </van-list>
 
-    <!-- <HoverNav></HoverNav> -->
+    <HoverNav></HoverNav>
   </div>
 </template>
 
@@ -293,6 +122,8 @@
   export default {
     data() {
       return {
+        curbargains: [],
+        seckillList: [],
         tabList: [],
         active: '',
         keyword: '',
@@ -301,18 +132,35 @@
         total: 0,
         listLoading: false,
         listFinished: false,
+        seckillList: []
       }
 
     },
 
     computed: {},
     created() {
-      api.league_goods_class({}).then((res) => {
+      
+      api.shop_goods_class({
+        is_group: 1
+      }).then((res) => {
         this.tabList = [{
           class_1: "",
           class_name: "全部"
         }].concat(res.data.list)
+
       })
+
+      // api.going_bargain({}).then((res) => {
+
+      //   this.curbargains = res.data
+      //   // this.countTime = this.curbargains.end_time * 1000 - (+new Date())
+      // })
+
+      // api.going_seckill({
+      //   page: this.page
+      // }).then((res) => {
+      //   this.seckillList = res.data.list.slice(0, 2)
+      // })
     },
     mounted() {
 
@@ -322,6 +170,9 @@
     },
 
     methods: {
+      toDetail(data) {
+        utils.jumpTo(`/mall/bargain-detail?bargain_id=${data.bargain_id}`)
+      },
       toDetail(item) {
         this.$router.push(`/mall/detail?goodsid=${item.goods_share_id}`)
       },
@@ -340,7 +191,8 @@
         this.loadList()
       },
       loadList() {
-        api.league_goods({
+        api.shop_goods({
+          is_group:1,
           class_1: this.active,
           goods_like: this.keyword,
           page: this.page
@@ -349,6 +201,7 @@
           if (res.code == 9999) {
             this.page++
             this.total = res.data.total
+
             this.dataList = this.dataList.concat(res.data.list)
 
             // 加载状态结束
@@ -369,7 +222,7 @@
   $red: #f90250;
   $cardpad: 4vw;
 
-  .app-container.page-union {
+  .app-container {
 
     ._nav {
       text-align: center;
@@ -385,7 +238,7 @@
     }
 
     ._tabs {
-      width: 91vw;
+      // width: 91vw;
       position: relative;
 
       ._r {
@@ -504,6 +357,8 @@
           @include flexbox();
 
           ._d {
+            width: 41%;
+
             ._time {
               font-size: 2.5vw;
 

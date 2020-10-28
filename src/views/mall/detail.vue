@@ -15,13 +15,14 @@
           style="height: 89vw;"
           indicator-color="white"
         >
-          <van-swipe-item>
+          <van-swipe-item
+            v-for="(item, index) in goodsdata.goods_image"
+            :key="index"
+          >
             <van-image
-              v-for="(item, index) in goodsdata.goods_image"
-              :key="index"
               width="100%"
               height="100%"
-              fit="cover"
+              fit="contain"
               :src="item"
             />
           </van-swipe-item>
@@ -204,23 +205,24 @@
         <div
           v-html="handledCont"
           style="white-space:pre-wrap"
+          class="_detail"
         ></div>
       </van-tab>
     </van-tabs>
 
     <van-goods-action class="_bot-wra">
+      <!-- v-if="!type" -->
       <van-goods-action-icon
         icon="star"
         :text="goodsdata.is_collect==1?'已收藏':'未收藏'"
         :color="goodsdata.is_collect==1?'#ff5000':''"
         @click="onClickBookIcon"
-        v-if="!type"
       />
-      <van-goods-action-icon
+      <!-- <van-goods-action-icon
         icon="chat-o"
         text="资讯"
         @click="onClickIcon"
-      />
+      /> -->
       <van-goods-action-icon
         icon="cart-o"
         text="购物车"
@@ -272,7 +274,7 @@
           <div>加入购物车</div>
         </van-goods-action-button> -->
         <van-goods-action-button
-          color="#adaaaa"
+          color="linear-gradient(to right, #ff6034, #ee0a24)"
           @click="onClickBuy"
         >
           <div>¥{{goodsdata.price}}</div>
@@ -306,6 +308,8 @@
       :quota="quota"
       :hide-quota-text="quota==1"
       :hide-stock="true"
+      :show-add-cart-btn="showAddcartbtn"
+      :buy-text="buyText"
       @buy-clicked="toBuy"
       @add-cart="toCart"
     />
@@ -328,6 +332,8 @@
   export default {
     data() {
       return {
+        buyText: '立即购买',
+        showAddcartbtn: true,
         fromOrderNo: '',
         groupList: [],
         type: '',
@@ -351,8 +357,7 @@
           stock_num: 9999, // 商品总库存
           collection_id: 2261, // 无规格商品 skuId 取 collection_id，否则取所选 sku 组合对应的 id
           none_sku: false, // 是否无规格商品
-        }
-
+        },
       }
 
     },
@@ -427,7 +432,7 @@
       setPrice(type) {
         // type三种 normal, group, prepay
         let obj = {
-          normal: 'price',
+          normal: 'price_show',
           group: 'group_price',
           prepay: 'prepay_price',
         }
@@ -561,20 +566,25 @@
 
       },
       onClickBuy() {
+        this.setPrice('normal')
+        this.showAddcartbtn = true
+        this.buyText = '立即购买'
         this.skuPopShow = true
       },
       onClickPrepay() {
         this.quota = 1
         this.setPrice('prepay')
         this.buyType = 'prepay'
+        this.showAddcartbtn = false
+        this.buyText = "预付定金"
         this.skuPopShow = true
+
       },
       onClickGroupBuy() {
         this.quota = 1
         this.setPrice('group')
         this.skuPopShow = true
-
-
+        this.buyType = 'group'
       },
       toBuy(data) {
         let obj = {
@@ -678,6 +688,12 @@
           padding: 0.7vw 3.7vw;
 
         }
+      }
+    }
+
+    ._detail {
+      img {
+        width: 100%;
       }
     }
 

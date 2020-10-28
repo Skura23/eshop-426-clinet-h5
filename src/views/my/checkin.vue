@@ -264,6 +264,7 @@
           api.integral_detail({}).then((res) => {
             this.signData = res.data
           })
+          utils.editCb(res)
         })
       },
       togCalend() {

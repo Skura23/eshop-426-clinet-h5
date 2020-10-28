@@ -1,29 +1,90 @@
 <!-- home -->
 <template>
-  <div class="app-container page-card-qr tc">
-    <div class="_d0 font18">张三</div>
-    <div class="_d1 font12">营销总监</div>
-    <div class="_d2 re">
-      <img
-        src="@/assets/imgs/12.png"
-        class=" v-h-center"
-        style="width:56vw"
-        alt=""
-      >
-      <div
-        class="v-h-center bac-whi"
-        style="width:47vw;height:47vw;"
-      >
+  <div class="app-container page-card-qr ">
+    <div class="m-card auto0 _card b-b">
+      <div class="_top">
         <van-image
-          width="100%"
-          height="100%"
+          width="18vw"
+          height="18vw"
+          radius="1.3vw"
           fit="cover"
-          :src="require('@/assets/imgs/78.png')"
+          :src="dataset.head_img"
         />
+        <div class="_r ml">
+          <div class="font14">{{dataset.username}}</div>
+          <div class="mt10 font12">{{dataset.group_name}}</div>
+          <div class="mt10 font12 cl-gray">{{dataset.label}}</div>
+        </div>
       </div>
-      
+      <van-divider />
+      <div class="_bot">
+        <div class="_d0">
+          <img
+            style="vertical-align: bottom;width:4vw;"
+            :src="require('@/assets/imgs/13.png')"
+            alt=""
+          > 手机 {{dataset.phone}}
+        </div>
+        <div class="_d1">
+          <div
+            class=" re"
+            style="height:100%"
+          >
+            <img
+              src="@/assets/imgs/12.png"
+              class=" v-h-center"
+              style="width:56vw"
+              alt=""
+            >
+            <div
+              class="v-h-center bac-whi"
+              style="width:47vw;height:47vw;"
+            >
+              <van-image
+                width="100%"
+                height="100%"
+                fit="cover"
+                :src="dataset.code_href"
+              />
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="_d3 font12 cl-gray">新零售</div>
+
+<div class="mt"></div>
+    <div
+      class="auto0 "
+      style="width: 73vw;"
+    >
+      <van-button
+        type="info"
+        class="mb10"
+        block
+        style="border-radius:2vw;"
+        color="#ff7728"
+        @click="getPoster"
+      >长按保存图片</van-button>
+    </div>
+
+
+    <van-popup
+      v-model="posterShow"
+      class="tc"
+    >
+      <img
+        :src="posterUrl"
+        alt=""
+        style="width:83vw;"
+      >
+      <van-button
+        type="info"
+        class="mb10"
+        color="#ff7728"
+
+      >长按图片保存到本地</van-button>
+    </van-popup>
   </div>
 </template>
 
@@ -39,18 +100,41 @@
   export default {
     data() {
       return {
-
+        dataset: {},
+        posterShow: false,
+        posterUrl: '',
       }
 
     },
 
     computed: {},
     created() {
-
+      api.card_image({
+        auth_code: this.$route.query.auth_code
+      }).then((res) => {
+        this.dataset = res.data
+      })
     },
     mounted() {},
 
-    methods: {}
+    methods: {
+      
+      getPoster() {
+        Toast.loading({
+          message: '图片生成中...',
+          forbidClick: true,
+          duration: 0
+        });
+        api.create_image({
+          auth_code: this.$route.query.auth_code
+        }).then((res) => {
+          this.showShare = false
+          this.posterShow = true
+          this.posterUrl = res.data.url
+          Toast.clear()
+        })
+      },
+    }
   }
 </script>
 
@@ -60,21 +144,26 @@
   scoped
 >
   .app-container.page-card-qr {
-    ._d0 {
-      margin-top: 13vw;
-    }
+    ._card {
+      margin-top: 10vw;
+      width: 73vw;
+      padding: 4vw;
+      padding-bottom: 0;
 
-    ._d1 {
-      margin-top: 4vw;
-    }
+      ._top {
+        @include flexbox();
+        justify-content: flex-start;
 
-    ._d2 {
-      margin-top: 17vw;
-      height: 56vw;
-    }
+        ._r {
+          text-align: left;
+        }
+      }
 
-    ._d3 {
-      margin-top: 20vw;
+      ._bot {
+        ._d1 {
+          height: 70vw;
+        }
+      }
     }
   }
 </style>

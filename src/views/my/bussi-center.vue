@@ -11,9 +11,9 @@
       >
       <div class="_t clearfix">
         <div class="fl">
-          可提现 <span class="font20">￥{{dataset.account}}</span>
+          累计佣金 <span class="font20">￥{{dataset.account}}</span>
         </div>
-        <div class="fr">
+        <!-- <div class="fr">
           <van-button
             round
             type="info"
@@ -22,23 +22,23 @@
             style="color:#f16e2e"
             @click="cashout"
           >提现</van-button>
-        </div>
+        </div> -->
       </div>
-      <div class="_b">
+      <!-- <div class="_b">
         入账中 <span class="font20">￥{{dataset.entering_amount}}</span>
-      </div>
+      </div> -->
     </div>
     <div class="m-card _d2">
-      <div class="i-b tc _item">
+      <div class="i-b tc _item" @click="$router.push(`/my/surplus-detail-list`)">
         <img
           src="@/assets/imgs/57.png"
           class="w100 mb10"
           alt=""
           style="width:5.9vw"
         >
-        <div class="">提现历史</div>
+        <div class="">佣金明细</div>
       </div>
-      <div class="i-b tc _item">
+      <!-- <div class="i-b tc _item">
         <img
           src="@/assets/imgs/56.png"
           class="w100 mb10"
@@ -46,7 +46,7 @@
           style="width:5.9vw"
         >
         <div class="">红包明细</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

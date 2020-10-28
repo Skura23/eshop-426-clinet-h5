@@ -106,6 +106,7 @@
         total: 0,
         listLoading: false,
         listFinished: false,
+        classIdx: '',
       }
 
     },
@@ -141,6 +142,7 @@
         this.loadList()
       },
       changeTab(data) {
+        this.classIdx = this.tabList[data].class_1
         this.dataList = []
         this.page = 1
         this.keyword = ''
@@ -148,7 +150,7 @@
       },
       loadList() {
         api.shop_goods({
-          class_1: this.active,
+          class_1: this.classIdx,
           goods_like: this.keyword,
           page: this.page
         }).then((res) => {

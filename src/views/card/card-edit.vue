@@ -17,10 +17,6 @@
     </div>
 
     <div class="_wra1">
-      
-
-      
-
       <div class="_d1 mt">
         <van-image
           width="100%"
@@ -165,7 +161,8 @@
     computed: {},
     created() {
 
-      api.shop_card_detail({}).then((res) => {
+
+      api.card_detail({}).then((res) => {
         this.dataset = res.data
         this.dataset.like_num = +this.dataset.like_num
       })

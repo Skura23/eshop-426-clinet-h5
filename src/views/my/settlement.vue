@@ -4,7 +4,7 @@
     <div
       class="bac-whi _d0 clearfix"
       v-if="!addr"
-      @click="$router.push('/my/address')"
+      @click="toAddr"
     >
       <span>还没有收货地址，立即添加</span>
       <van-icon
@@ -17,7 +17,7 @@
 
     <div
       class="bac-whi _d0 clearfix"
-      @click="$router.push('/my/address')"
+      @click="toAddr"
       v-else
     >
       <span>地址：{{addr}}</span>
@@ -52,13 +52,17 @@
             </div> -->
             <div class="_p2 _p mt font16 cl-red clearfix">
               <div class="fl">
-                ￥{{goodsData.type == 'credit' ? item.money : item.price}}
+                ￥{{goodsData.type == 'credit' ? item.money : goodsData.type == 'bargain'?item.market_price :item.price}}
               </div>
-              <div class="fr">
+              <div
+                class="fr"
+                v-if="goodsData.type != 'bargain'"
+              >
                 <van-stepper
                   v-model="item.num"
                   input-width="6vw"
                   button-size="6vw"
+                  @change="changeNum"
                   v-if="goodsData.type != 'cart' && goodsData.type != 'credit'"
                 />
                 <span v-if="goodsData.type == 'cart'">x {{item.num}}</span>
@@ -84,7 +88,7 @@
       <van-cell-group>
         <van-cell
           title="优惠券"
-          v-if="goodsData.type != 'credit'"
+          v-if="goodsData.type != 'credit' && goodsData.type != 'bargain'"
         >
           <template slot="">
             <span class="cl-oran">
@@ -93,15 +97,54 @@
             张可用
           </template>
         </van-cell>
+
+        <van-radio-group
+          v-model="yhRadio"
+          :max="1"
+          v-if="orderData.yh_list && orderData.yh_list.length>0"
+        >
+          <van-cell-group>
+            <van-cell
+              :border="false"
+              :title="item.yh_info"
+              clickable
+              @click="clickYh(index)"
+              v-for="(item, index) in orderData.yh_list"
+              :key="index"
+            >
+              <template #right-icon>
+                <!-- 增加pointer-events: none;以防止点击冒泡导致交互错误 -->
+                <van-radio
+                  checked-color="#ff7728"
+                  :name="index"
+                  style="pointer-events: none;"
+                />
+              </template>
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
+
         <van-cell
           v-if="goodsData.type != 'credit'"
           title="商品金额"
-          :value="orderData.order_amount"
+          :border="false"
+        >
+          <template>
+            <span class="cl-oran">
+              ¥
+              {{params.type=='cart'?orderData.real_amount : params.type=='bargain'?orderData.amount: orderData.order_amount}}
+            </span>
+          </template>
+        </van-cell>
+        <van-cell
+          v-if="goodsData.type == 'bargain'"
+          title="优惠"
+          :value="orderData.yh"
           :border="false"
         />
         <van-cell
           title="优惠券"
-          v-if="goodsData.type != 'credit'"
+          v-if="goodsData.type != 'credit' && goodsData.type != 'bargain'"
           :value="orderData.yh"
           :border="false"
         />
@@ -123,10 +166,11 @@
         >
           <template
             slot=""
-            v-if="goodsData.type != 'credit'"
+            v-if="goodsData.type != 'credit' && goodsData.buyType != 'prepay'"
           >
             <span class="cl-oran">
-              ¥ {{params.type=='cart'?orderData.real_amount : price/100}}
+              ¥
+              {{params.type=='cart'?orderData.real_amount : params.type=='bargain'?orderData.amount: orderData.real_amount}}
             </span>
           </template>
           <template
@@ -137,14 +181,30 @@
               ¥ {{orderData.money}}
             </span>
           </template>
+          <template
+            slot=""
+            v-if="goodsData.buyType == 'prepay'"
+          >
+            <span class="cl-oran">
+              ¥ {{orderData.prepay_amount}}
+            </span>
+          </template>
         </van-cell>
+
+        <van-cell
+          title="总价"
+          v-if="goodsData.buyType == 'prepay'"
+          :value="orderData.order_amount"
+          :border="false"
+        />
       </van-cell-group>
     </div>
 
     <van-submit-bar
-      :price="params.type=='cart'?orderData.real_amount*100 : params.type=='credit'?orderData.money*100: price"
+      :price="params.type=='cart'?orderData.real_amount*100 : params.type=='credit'? orderData.money*100: params.type=='bargain'?orderData.amount*100:params.buyType=='prepay'?Number(orderData.prepay_amount)*100:price "
       :disabled="disabled"
       button-text="提交订单"
+      :label="params.buyType=='prepay'?'预付：':'合计：'"
       @submit="onSubmit"
     />
 
@@ -169,13 +229,14 @@
         stepperVal: 1,
         addr: '',
         orderData: {
-          real_amount: 222
+          real_amount: ''
         },
         disabled: true,
         receiverId: '',
         remark: '',
         params: {},
-        pageIsfrom: ''
+        pageIsfrom: '',
+        yhRadio: 0
       }
 
     },
@@ -187,79 +248,127 @@
       })
     },
     created() {
-      // this.factory_id = this.$route.params.factory_id
-      // this.cart_ids = this.$route.params.cart_ids
-      if (this.pageIsfrom == 'my-address') {
-
-      }
-
-      let params = this.$route.query
-      this.params = params
-      console.log(params, 'params');
-      this.goodsData = params
-      if (params.type == 'cart') {
-        api.goods_cart_check({
-          factory_id: params.factory_id,
-          cart_id: params.cart_ids,
-        }).then((res) => {
-          this.orderData = res.data
-          this.disabled = false
-          this.receiverId = res.data.receipt_address.receiver_id
-        })
-      } else if (params.type == 'buy' || params.type == 'normal') {
-        api.order_check_create(this.goodsData).then((res) => {
-          this.orderData = res.data
-          this.disabled = false
-          this.receiverId = res.data.receipt_address.receiver_id
-        })
-      } else if (params.type == 'group') {
-        api.order_group_check_create(this.goodsData).then((res) => {
-          this.orderData = res.data
-          this.disabled = false
-          this.receiverId = res.data.receipt_address.receiver_id
-        })
-      } else if (params.type == 'credit') {
-        api.integral_order_check(this.goodsData).then((res) => {
-          this.orderData = res.data
-          this.orderData.goods_list = [res.data.goods]
-          this.disabled = false
-          this.receiverId = res.data.receipt_address.receiver_id
-        })
-      }
-
-      api.get_member_default_receipt_address({}).then((res) => {
-        if (this.pageIsfrom == 'my-address') {
-          this.addr = this.$store.getters.curAddr.name
-          this.receiverId = this.$store.getters.curAddr.id
-          return
-        }
-        if (res.data.receiver_id) {
-          this.addr = res.data.province_name +
-            res.data.city_name +
-            res.data.area_name
-        }
-      })
-
-
+      this.createdFunc()
     },
     mounted() {},
     computed: {
       price() {
-        console.log('price');
-        let sum = 0
-        let arr = this.orderData.goods_list
-        for (let i = 0; i < arr.length; i++) {
-          let elem = arr[i];
-          console.log(elem);
-          sum += elem.price * elem.num
-        }
-        console.log(sum);
+        // if (!this.orderData.goods_list) {
+        //   return
+        // }
+        // console.log('price');
+        // let sum = 0
+        // let arr = this.orderData.goods_list
+        // for (let i = 0; i < arr.length; i++) {
+        //   let elem = arr[i];
+        //   console.log(elem);
+        //   sum += elem.price * elem.num
+        // }
+        // console.log(sum);
 
-        return sum * 100
-      }
+        // return sum * 100
+      },
+      coupon_no() {
+        return (this.orderData.yh_list && this.orderData.yh_list.length > 0) && (this.orderData.yh_list[this.yhRadio] &&
+          this.orderData.yh_list[this.yhRadio].coupon_no)
+      },
     },
 
     methods: {
+      changeNum() {
+        this.createdFunc()
+      },
+      createdFunc() {
+
+        // this.factory_id = this.$route.params.factory_id
+        // this.cart_ids = this.$route.params.cart_ids
+        if (this.pageIsfrom == 'my-address') {
+
+        }
+
+        let params = this.$route.query
+        this.params = params
+        console.log(params, 'params');
+        this.goodsData = params
+        this.goodsData.coupon_no = this.coupon_no
+        this.goodsData.num = this.orderData.goods_list?this.orderData.goods_list[0].num:1
+        if (params.type == 'cart') {
+          api.goods_cart_check({
+            factory_id: params.factory_id,
+            cart_id: params.cart_ids,
+            coupon_no: this.coupon_no
+          }).then((res) => {
+            this.orderData = res.data
+            this.disabled = false
+            this.receiverId = res.data.receipt_address.receiver_id
+          })
+        } else if (params.type == 'buy' || (params.type == 'normal' && params.buyType != 'prepay')) {
+          api.order_check_create(this.goodsData).then((res) => {
+            this.orderData = res.data
+            this.disabled = false
+            this.receiverId = res.data.receipt_address.receiver_id
+          })
+        } else if (params.type == 'credit') {
+          api.integral_order_check(this.goodsData).then((res) => {
+            this.orderData = res.data
+            this.orderData.goods_list = [res.data.goods]
+            this.disabled = false
+            this.receiverId = res.data.receipt_address.receiver_id
+          })
+        } else if (params.type == 'bargain') {
+          api.bargain_order_check(this.goodsData).then((res) => {
+            this.orderData = JSON.parse(JSON.stringify(res.data))
+            this.orderData.goods_list = [res.data]
+            this.disabled = false
+            this.receiverId = res.data.receipt_address.receiver_id
+          })
+        } else if (params.buyType == 'prepay') {
+          api.order_prepay_check_create(this.goodsData).then((res) => {
+            this.orderData = JSON.parse(JSON.stringify(res.data))
+            this.disabled = false
+            this.receiverId = res.data.receipt_address.receiver_id
+          })
+        } else if (params.buyType == 'group') {
+          api.order_group_check_create(this.goodsData).then((res) => {
+            this.orderData = res.data
+            this.disabled = false
+            this.receiverId = res.data.receipt_address.receiver_id
+          })
+        }
+
+        api.get_member_default_receipt_address({}).then((res) => {
+          if (this.pageIsfrom == 'my-address') {
+            this.addr = this.$store.getters.curAddr.name
+            this.receiverId = this.$store.getters.curAddr.id
+            return
+          }
+          if (res.data.receiver_id) {
+            this.addr = res.data.province_name +
+              res.data.city_name +
+              res.data.area_name
+          }
+        })
+
+
+
+      },
+      clickYh(index) {
+        if (index == this.yhRadio) {
+          this.yhRadio = 'none'
+          this.orderData.yh = ''
+        } else {
+          this.yhRadio = index
+          this.orderData.yh = this.orderData.yh_list[this.yhRadio].yh
+        }
+        this.createdFunc()
+        console.log(index, 'clickYh');
+      },
+      toAddr() {
+        this.$router.push({
+          path: '/my/address',
+          query: this.params
+        })
+      },
       onSubmit() {
         let {
           type,
@@ -272,6 +381,8 @@
           cart_ids,
           // credit
           goods_id,
+          // bargain
+          bargain_id,
         } = this.goodsData
         let order_create = api.order_create
         let data
@@ -298,17 +409,23 @@
             // }
             order_create = api.integral_order_create
           }
+          if (type == 'bargain') {
+            order_create = api.bargain_order_create
+          }
         }
         if (buyType) {
           if (buyType == 'prepay') {
             order_create = api.order_prepay_create
+          }
+          if (buyType == 'group') {
+            order_create = api.order_group_create
           }
         }
 
         this.disabled = true
 
         order_create({
-          coupon_no: this.orderData.coupon_no,
+          coupon_no: this.coupon_no,
           receiver_id: this.receiverId,
           factory_id,
           cart_id: cart_ids,
@@ -331,6 +448,7 @@
                 } else {
                   utils.onBridgeReady(res2.data, () => {
                     Toast('支付成功')
+                    this.$router.push(`/my/order-detail?order_no=${res.data.order_no}`)
                   }, () => {
                     Toast('支付失败')
                   })
@@ -346,17 +464,21 @@
             }
 
 
-            if (type == 'credit') {
-              if (res.data.is_pay == 1) {
-                orderPay()
-              } else {
-                Toast('支付成功')
-                this.disabled = false
-              }
-            } else {
-              orderPay()
-            }
 
+            // if (type == 'credit') {
+            if (res.data.need_pay == 1) {
+              orderPay()
+            } else {
+              Toast('支付成功')
+              this.$router.push(`/my/order-detail?order_no=${res.data.order_no}`)
+              this.disabled = false
+            }
+            // } else {
+            //   orderPay()
+            // }
+
+          } else if (res.code == 8700) {
+            this.$router.push(`/login/bindphone`)
           } else {
             Toast(res.info)
             this.disabled = false

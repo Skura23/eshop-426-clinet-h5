@@ -16,15 +16,15 @@
               height="13vw"
               fit="cover"
               round
-              :src="require('@/assets/imgs/78.png')"
+              :src="userData.headimgurl"
             />
-            <span class="ml font16 cl-whi">封印</span>
-            <img
+            <span class="ml font16 cl-whi">{{userData.member_name}}</span>
+            <!-- <img
               src="@/assets/imgs/44.png"
               style="width:5.2vw;"
               alt=""
               class="ab _edit"
-            >
+            > -->
           </div>
           <!-- <div class="_r">
             <img
@@ -37,12 +37,18 @@
         </div>
 
         <div class="_d0-1 mt cl-whi">
-          <div class="">
-            <div class="font18">0</div>
+          <div
+            class=""
+            @click="$router.push('/my/bussi-center')"
+          >
+            <div class="font18">{{userData.all_commission}}</div>
             <div class="">我的佣金</div>
           </div>
-          <div class="">
-            <div class="font18">0</div>
+          <div
+            class=""
+            @click="$router.push('/credit/index')"
+          >
+            <div class="font18">{{userData.integral}}</div>
             <div class="">我的积分</div>
           </div>
         </div>
@@ -62,7 +68,14 @@
           <van-col
             span="6"
             @click="jumpTo('orders', 'topay')"
+            class="re"
           >
+            <div
+              class="ab _r-i"
+              v-if="userData.un_pay_num && userData.un_pay_num!='0'"
+            >
+              {{userData.un_pay_num}}
+            </div>
             <img
               src="@/assets/imgs/26.png"
               alt=""
@@ -72,24 +85,48 @@
           <van-col
             span="6"
             @click="jumpTo('orders', 'tosend')"
+            class="re"
           >
             <img
               src="@/assets/imgs/25.png"
               alt=""
             >
+            <div
+              class="ab _r-i"
+              v-if="userData.un_send_num&& userData.un_send_num!='0'"
+            >
+              {{userData.un_send_num}}
+            </div>
             <div class="mt5">待发货</div>
           </van-col>
           <van-col
             span="6"
             @click="jumpTo('orders', 'torecieve')"
+            class="re"
           >
+            <div
+              class="ab _r-i"
+              v-if="userData.send_num&& userData.send_num!='0'"
+            >
+              {{userData.send_num}}
+            </div>
             <img
               src="@/assets/imgs/28.png"
               alt=""
             >
             <div class="mt5">待收货</div>
           </van-col>
-          <van-col span="6">
+          <van-col
+            span="6"
+            class="re"
+          >
+
+            <div
+              class="ab _r-i"
+              v-if="userData.refund_num && userData.refund_num!='0'"
+            >
+              {{userData.refund_num}}
+            </div>
             <img
               src="@/assets/imgs/27.png"
               @click="jumpTo('refund-orders')"
@@ -218,17 +255,19 @@
           </template>
         </van-cell>
         <div class="_cont mt10">
+
           <div
             class="_i font12 mb10 mr10"
-            v-for="(item, index) in 4"
+            v-for="(item, index) in creditGoods"
             :key="index"
+            @click="jumpTo('credit')"
           >
             <div class="_i-0 tc">
               <van-image
                 width="21vw"
                 height="23vw"
                 fit="cover"
-                :src="require('@/assets/imgs/78.png')"
+                :src="item.goods_image[0]"
               />
             </div>
             <div class="_i-1 mt5">
@@ -239,11 +278,11 @@
               >
             </div>
             <div class="_i-2 mt10">
-              小米小钢炮蓝牙音箱
+              {{item.goods_name}}
             </div>
             <div class="_i-3 mt10">
-              <span class="font16 cl-red bold">4000</span>
-              <span> 积分+￥5···</span>
+              <!-- <span class="font16 cl-red bold">4000</span> -->
+              <span>{{item.price_show}}</span>
             </div>
           </div>
         </div>
@@ -268,19 +307,23 @@
             >
             <span class="font12"> 封印成功领取“无门槛优惠券···</span> -->
           </template>
+          <template>
+            <span @click="$router.push('/mall/bargain')">更多</span>
+          </template>
         </van-cell>
         <div class="_cont mt10">
           <div
             class="_i font12 mb10 mr10"
-            v-for="(item, index) in 4"
+            v-for="(item, index) in freeGoods"
             :key="index"
+            @click="$router.push('/mall/bargain')"
           >
             <div class="_i-0 tc">
               <van-image
                 width="21vw"
                 height="23vw"
                 fit="cover"
-                :src="require('@/assets/imgs/78.png')"
+                :src="item.goods_image[0]"
               />
             </div>
             <div class="_i-1 mt5">
@@ -291,11 +334,11 @@
               >
             </div>
             <div class="_i-2 mt10">
-              小米小钢炮蓝牙音箱
+              {{item.goods_name}}
             </div>
-            <div class="_i-3 mt10">
+            <!-- <div class="_i-3 mt10">
               距门店4679m
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -337,6 +380,16 @@
             >
             <div class="mt5">客服咨询</div>
           </van-col>
+          <van-col
+            span="6"
+            @click="$router.push(`/others/shopapply`)"
+          >
+            <img
+              src="@/assets/imgs/82.png"
+              alt=""
+            >
+            <div class="mt5">开店申请</div>
+          </van-col>
         </van-row>
 
       </div>
@@ -357,7 +410,10 @@
   export default {
     data() {
       return {
-        serviceUrl: ''
+        serviceUrl: '',
+        freeGoods: [],
+        creditGoods: [],
+        userData: {},
       }
 
     },
@@ -367,6 +423,16 @@
       api.shop_card_detail({}).then((res) => {
         this.serviceUrl = `/card/chat?auth_code=${res.data.auth_code}`
       })
+      api.integral_goods_list({}).then((res) => {
+        this.creditGoods = res.data.list.slice(0, 4)
+      })
+      api.bargain_goods_list({}).then((res) => {
+        this.freeGoods = res.data.list.slice(0, 4)
+      })
+      api.shop_member_detail({}).then((res) => {
+        this.userData = res.data
+      })
+
     },
     mounted() {},
 
@@ -426,6 +492,11 @@
           // this.$router.push('/my/orders')
           utils.jumpTo('/credit/index')
         }
+        if (str == 'bargain') {
+          // this.$router.push('/my/orders')
+          utils.jumpTo('/my/bargain')
+        }
+        
 
       },
     }
@@ -467,6 +538,17 @@
         ._b {
           img {
             height: 6.4vw;
+          }
+
+          ._r-i {
+            color: #ff7728;
+            width: 3.5vw;
+            height: 3.5vw;
+            right: 3vw;
+            top: -2vw;
+            line-height: 3.5vw;
+            border-radius: 99px;
+            border: 1px solid #ff7728;
           }
         }
       }

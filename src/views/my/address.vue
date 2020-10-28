@@ -5,11 +5,11 @@
       v-model="chosenAddressId"
       :list="localList"
       disabled-text=""
-      :switchable="false"
+      :switchable="true"
       default-tag-text="默认"
       @add="onAdd"
       @edit="onEdit"
-      @click-item="onSelect"
+      @select="onSelect"
     />
   </div>
 </template>
@@ -41,6 +41,8 @@
 
     computed: {},
     created() {
+      this.query = this.$route.query
+
       api.member_receipt_address({}).then((res) => {
         this.localList = utils.jsonClone(res.data.list)
         this.reBuildList()
@@ -49,7 +51,7 @@
     mounted() {
       console.log(this.$route, this.$router, 'router');
     },
-    
+
     beforeRouteEnter(to, from, next) {
       // this.pageIsfrom = from;
       console.log(this, from, 'beforeRouteEnter');
@@ -62,13 +64,22 @@
 
     methods: {
       onSelect(item, idx) {
-        if (this.pageIsfrom == 'my-settlement') {
-          this.$store.commit('setCurAddr', {
-            name: item.address,
-            id: item.id,
-          })
-          this.$router.back()
-        }
+        // if (this.pageIsfrom == 'my-settlement') {
+        //   this.$store.commit('setCurAddr', {
+        //     name: item.address,
+        //     id: item.id,
+        //   })
+        //   this.$router.back()
+        // }
+        this.$store.commit('setCurAddr', {
+          name: item.address,
+          id: item.id,
+        })
+        this.$router.push({
+          path: '/my/settlement',
+          query: this.query
+        })
+
 
       },
       reBuildList() {

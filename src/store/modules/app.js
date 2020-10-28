@@ -1,7 +1,7 @@
 const state = {
   userName: '',
   tabType: '',
-  curAddr: {}
+  curAddr: {},
 }
 const mutations = {
   SET_USER_NAME(state, name) {
@@ -13,6 +13,7 @@ const mutations = {
   setCurAddr(state, addr){
     state.curAddr = addr
   },
+  
 }
 
 const actions = {

@@ -1,11 +1,16 @@
 <template>
-  <section id="noCommodities">
-    <div class="no_commodities_logo_wrapper">
+  <section id="noCommodities" class="re">
+    <!-- <div class="no_commodities_logo_wrapper">
       <figure class="no_commodities_logo"></figure>
     </div>
     <p class="no_commodities_warning">购物车空空如也</p>
-    <p class="no_commodities_suggest">快给我挑点宝贝吧</p>
-    <button class="link_to_home" @click="$router.push('/mall/index')">去逛逛</button>
+    <p class="no_commodities_suggest">快给我挑点宝贝吧</p> -->
+    <div class="v-h-center"></div>
+    <img src="@/assets/imgs/61.png" alt="">
+    <!-- <button class="link_to_home" @click="$router.push('/mall/index')">去逛逛</button> -->
+    <div class="tc">
+<van-button type="primary" color="#ff7728" style="width:40vw; border-radius:2vw;">随便逛逛</van-button>
+    </div>
   </section>
 </template>
 
@@ -25,7 +30,7 @@ export default {
 <style lang="scss">
   #noCommodities {
     height: 100vh;
-    background: $no_commodities_gray;
+    // background: $no_commodities_gray;
     margin: 0 auto;
     padding-top: rem(100);
     text-align: center;

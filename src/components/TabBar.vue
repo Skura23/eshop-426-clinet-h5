@@ -8,6 +8,7 @@
         fixed
         route
         z-index="3"
+        active-color="#ff7728"
       >
         <van-tabbar-item
           to="/mall"
@@ -50,6 +51,8 @@
         fixed
         route
         z-index="3"
+        active-color="#ff7728"
+
       >
         <van-tabbar-item
           to="/credit/index"

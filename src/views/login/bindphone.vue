@@ -98,7 +98,7 @@
       <div
         class="_btn u-btn"
         @click="login"
-      >登&nbsp;&nbsp;录</div>
+      >绑定手机号</div>
     </div>
   </div>
 </template>
@@ -179,7 +179,7 @@
           return false;
         }
 
-        api.send_phone_message({
+        api.send_bound_message({
           verify_code: this.imgCode,
           image_code: this.codeImgSuffix,
           phone: this.d_form.tele,
@@ -201,43 +201,45 @@
         }
         console.log(this.d_form, 'this.d_form');
         api.register({
-          open_id: this.openid,
-          root_factory_id: 1,
           phone: this.d_form.tele,
           phone_code: this.d_form.code
         }).then((res) => {
-          if (res.code == 9999) {
+          utils.editCb(res, () => {
+            this.$router.back()
+          })
 
-            if (res.data.status == 1) {
-              setToken(res.data.response.token)
-              Cookies.set('eshop-426-client-h5_userinfo', res.data.response)
-              this.$wxShare.wxShowMenu();
-              Toast({
-                message: '注册成功',
-                duration: 1500,
-                onClose: () => {
-                  utils.jumpTo('/')
-                }
-              })
-            } else if (res.data.status == 2) {
-              Toast({
-                message: '请选择注册门店',
-                duration: 1500,
-                onClose: () => {
-                  utils.jumpTo(`/login/factory-list`)
-                  this.$router.push({
-                    path: `./factory-list`,
-                    name: "factory-list",
-                    params: {
-                      page: this,
-                    }
-                  })
-                }
-              })
-            }
-          } else {
-            Toast(res.info)
-          }
+          // if (res.code == 9999) {
+
+          //   // if (res.data.status == 1) {
+          //   //   setToken(res.data.response.token)
+          //   //   Cookies.set('eshop-426-client-h5_userinfo', res.data.response)
+          //   //   this.$wxShare.wxShowMenu();
+          //   //   Toast({
+          //   //     message: '绑定成功',
+          //   //     duration: 1500,
+          //   //     onClose: () => {
+          //   //       utils.jumpTo('/')
+          //   //     }
+          //   //   })
+          //   // } else if (res.data.status == 2) {
+          //   //   Toast({
+          //   //     message: '请选择注册门店',
+          //   //     duration: 1500,
+          //   //     onClose: () => {
+          //   //       utils.jumpTo(`/login/factory-list`)
+          //   //       this.$router.push({
+          //   //         path: `./factory-list`,
+          //   //         name: "factory-list",
+          //   //         params: {
+          //   //           page: this,
+          //   //         }
+          //   //       })
+          //   //     }
+          //   //   })
+          //   // }
+          // } else {
+          //   Toast(res.info)
+          // }
 
         })
       },

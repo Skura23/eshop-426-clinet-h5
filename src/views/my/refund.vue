@@ -1,25 +1,28 @@
 <!-- home -->
 <template>
   <div class="app-container page-my-refund">
+    <div class="mt0"></div>
     <div
-      class="bac-whi mt10 _d0"
+      class="bac-whi  _d0"
       style="padding:3vw"
+       v-for="(item, index) in refundData.order_detail.goods" :key="index"
     >
       <div class="_d0_0">
         <van-image
           width="20vw"
           height="20vw"
           fit="cover"
-          :src="require('@/assets/imgs/78.png')"
+          :src="item.goods_image[0]"
         />
       </div>
       <div class="_d0_1 ml10">
         <div class="">
-          睡衣睡裤春季纯棉睡衣睡裤
-          春季纯棉
+          {{item.goods_name}}
         </div>
         <div class="mt cl-gray">
-          黄色；30寸
+          <span  v-for="(item, index) in item.option_name || []" class="mr5" :key="index">
+            {{item}}
+          </span>
         </div>
       </div>
     </div>
@@ -123,14 +126,16 @@
         reasonId: '',
         refundText: '',
         fileList: [],
+        orderNo: ''
       }
 
     },
 
     computed: {},
     created() {
+      this.orderNo = this.$route.query.order_no
       api.order_refund_check({
-        order_no: 20083100010001
+        order_no: this.orderNo
       }).then((res) => {
         this.refundData = res.data
 
@@ -146,16 +151,14 @@
       submit() {
         let arr = this.fileList.map(v => v.url)
         api.order_refund_create({
-          order_no: '',
+          order_no: this.orderNo,
           reason_id: this.reasonId,
           image_url: arr,
           remark: this.refundText,
         }).then((res) => {
-          if (res.code == 9999) {
-            this.$router.push(`/my`)
-          } else {
-            Toast(res.info)
-          }
+          utils.editCb(res, () => {
+            this.$router.push(`/my/orders`)
+          })
         })
       },
       onReasonConfirm(val, idx) {

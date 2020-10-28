@@ -179,11 +179,13 @@
       api.member_friend_log({
         auth_code: this.auth_code
       }).then((res) => {
+        // this.$route.meta.title = res.data.receive_nick_name
         createSocket(res.data.socket_code)
         this.msgList = res.data.list
         Vue.nextTick(function () {
           // DOM 更新了
           var div = document.getElementById('main');
+          var topTitleDom = document.getElementsByClassName('van-nav-bar__title')[0].innerHTML = res.data.receive_nick_name
           div.scrollTop = div.scrollHeight - div.clientHeight;
         })
       })

@@ -167,7 +167,15 @@ export const router = [{
       keepAlive: false,
     }
   },
-  
+  {
+    path: '/mall/hotgroup',
+    name: 'mall-hotgroup',
+    component: () => import('@/views/mall/hotgroup'),
+    meta: {
+      title: '热团拼购',
+      keepAlive: false,
+    }
+  },
   {
     path: '/mall/union',
     name: 'mall-union',
@@ -282,6 +290,15 @@ export const router = [{
     }
   },
   {
+    path: '/my/order-detail',
+    name: 'my-order-detail',
+    component: () => import('@/views/my/order-detail'),
+    meta: {
+      title: '订单列表',
+      keepAlive: false,
+    }
+  },
+  {
     path: '/my/refund-orders',
     name: 'my-refund-orders',
     component: () => import('@/views/my/refund-orders'),
@@ -370,11 +387,19 @@ export const router = [{
       keepAlive: false,
     }
   },{
+    path: '/my/surplus-detail-list',
+    name: 'my-surplus-detail-list',
+    component: () => import('@/views/my/surplus-detail-list'),
+    meta: {
+      title: '佣金明细',
+      keepAlive: false,
+    }
+  },{
     path: '/my/surplus-detail',
     name: 'my-surplus-detail',
     component: () => import('@/views/my/surplus-detail'),
     meta: {
-      title: '余额明细',
+      title: '佣金详情',
       keepAlive: false,
     }
   },
@@ -489,7 +514,17 @@ export const router = [{
       noTopbar: true
 
     }
-  }
+  }, {
+    path: '/login/bindphone',
+    name: 'login-bindphone',
+    component: () => import('@/views/login/bindphone'),
+    meta: {
+      title: '绑定手机号',
+      keepAlive: true,
+      noTopbar: true
+
+    }
+  },
 ]
 
 const createRouter = () =>

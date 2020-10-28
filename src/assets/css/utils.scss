@@ -77,7 +77,8 @@
 .ab {
   position: absolute;
 }
-.fixed{
+
+.fixed {
   position: fixed;
 
 }
@@ -108,6 +109,10 @@
 
 .ov {
   overflow: hidden;
+}
+
+.ov-a {
+  overflow: auto;
 }
 
 .hide {
@@ -154,6 +159,12 @@
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
+}
+
+.t-v-center{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .i-b {
@@ -316,6 +327,20 @@ $cl-blue: #447ABF;
 
 .bac-red {
   background-color: #d40303;
+}
+
+.m-search {
+  .van-search__content {
+    background-color: transparent;
+
+    input {
+      border: 1px solid $cl-oran;
+      width: 73vw;
+      margin: 0 auto;
+      padding: 1vw 3vw ;
+      border-radius: 99px;
+    }
+  }
 }
 
 .m-card {

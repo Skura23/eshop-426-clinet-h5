@@ -1,13 +1,14 @@
 <!-- home -->
 <template>
-  <div class="app-container page-order">
+  <div class="app-container page-order page-mall">
     <div class="">
       <van-search
         v-model="keyword"
-        placeholder="请输入搜索关键词"
+        placeholder="搜索你感兴趣的商品"
         :clearable="true"
         @clear="clearSear"
         @search="sear"
+        shape="round"
       />
     </div>
 
@@ -21,22 +22,25 @@
           width="100%"
           height="100%"
           fit="cover"
-          :src="require('@/assets/imgs/78.png')"
+          :src="require('@/assets/imgs/85.png')"
         />
       </van-swipe-item>
-      <van-swipe-item>
+      <!-- <van-swipe-item>
         <van-image
           width="100%"
           height="100%"
           fit="cover"
           :src="require('@/assets/imgs/78.png')"
         />
-      </van-swipe-item>
+      </van-swipe-item> -->
 
     </van-swipe>
 
     <div class="_nav">
-      <div class="_i">
+      <div
+        class="_i"
+        @click="$router.push('/mall/hotgroup')"
+      >
         <div>
           <van-image
             width="10.3vw"
@@ -74,7 +78,7 @@
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/18.png')"
+            :src="require('@/assets/imgs/20.png')"
           />
         </div>
         <div class="">
@@ -109,7 +113,7 @@
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/20.png')"
+            :src="require('@/assets/imgs/18.png')"
           />
         </div>
         <div class="">
@@ -200,7 +204,7 @@
     </van-tabs>
 
     <!-- 砍价 秒杀 -->
-    <div class="_promo">
+    <div class="_promo mt10">
 
 
       <div
@@ -258,7 +262,7 @@
                   type="info"
                   size="normal"
                   color="#ff7726"
-                  @click="toDetail(item)"
+                  @click="$router.push('/mall/bargain')"
                 >继续砍价</van-button>
               </div>
               <div class="mt10"></div>
@@ -267,7 +271,10 @@
         </div>
       </div>
 
-      <div class="_sec mt">
+      <div
+        class="_sec mt"
+        v-if="seckillList[0]"
+      >
         <div class="_in">
           <div
             class="_l _d"
@@ -357,11 +364,13 @@
       finished-text="暂无更多数据"
       error-text="请求失败，点击重新加载"
       @load="loadList"
+      class="mt"
     >
       <van-grid
-        column-num="2"
+        column-num="1"
         gutter="2.5vw"
-        class="mt"
+        class=""
+        direction="horizontal"
       >
         <van-grid-item
           class="_card re"
@@ -369,58 +378,77 @@
           :key="index"
           @click="toDetail(item)"
         >
-          <div class="ab _top-right tc2 font10" v-show="item.goods_type">
+          <div
+            class="ab _top-right tc2 font10"
+            v-show="item.goods_type"
+          >
             <img
               src="@/assets/imgs/23.png"
               class="ab"
               width="100%"
               style="z-index:-1"
               alt=""
-
             >
             <!--  type todo -->
             {{item.goods_type}}
           </div>
-          <van-image
-            width="100%"
-            height="47vw"
-            fit="cover"
-            :src="item.goods_image[0]"
-          />
-          <div
-            class="_tit mt5"
-            style=""
-          >
-            {{item.goods_name}}
+          <div class="">
+            <van-image
+              width="42vw"
+              height="45vw"
+              fit="cover"
+              :src="item.goods_image[0]"
+            />
           </div>
-          <div class="_tags mt5 w100">
-            <div style="height:5.3vw">
-              <span v-if="item.goods_tag">
-                <van-tag
-                  plain
-                  class="mr5"
-                  v-for="(tag, index) in item.goods_tag=typeof item.goods_tag=='string'?[item.goods_tag]:item.goods_tag"
-                  :key="index"
-                >{{tag}}</van-tag>
-              </span>
-            </div>
-            <!-- <div class="cl-red ">
+          <div class="ml10 _card-r">
+            <div class="_r-t">
+              <div
+                class="_tit mt"
+                style=""
+              >
+                {{item.goods_name}}
+              </div>
+              <div class="_tags mt5 w100">
+                <div style="height:5.3vw">
+                  <span v-if="item.goods_tag">
+                    <van-tag
+                      plain
+                      class="mr5"
+                      v-for="(tag, index) in item.goods_tag=typeof item.goods_tag=='string'?[item.goods_tag]:item.goods_tag"
+                      :key="index"
+                    >{{tag}}</van-tag>
+                  </span>
+                </div>
+                <!-- <div class="cl-red ">
               分享赚500
             </div> -->
-          </div>
-          <div class="_price mt5 w100">
-            <div>
-              <span class="cl-red font16">¥{{item.price}}</span>
-              <span class="cl-gray font12 ml5">¥{{item.market_price}}</span>
+              </div>
             </div>
-            <div>
-              <span class="bor99 _buy font10">立即购买</span>
+
+            <div class="_r-b mb10">
+              <div class="_price mt5 w100">
+                <div>
+                  <span class="cl-red font16">¥{{item.price}}</span>
+                  <span
+                    class="cl-gray font12 ml5"
+                    style="text-decoration: line-through;"
+                  >¥{{item.market_price}}</span>
+                </div>
+                <div>
+                  <span class="bor99 _buy font12">立即购买</span>
+                </div>
+              </div>
+              <div class="_comp mt5 cl-gray font10 w100">
+                {{item.factory_name}} {{item.province_name}}
+                <van-icon
+                  name="arrow"
+                  style="vertical-align:-2px;"
+                />
+              </div>
             </div>
+
           </div>
-          <div class="_comp mt5 cl-gray font10 w100">
-            {{item.factory_name}}
-            <van-icon name="arrow" />
-          </div>
+
         </van-grid-item>
       </van-grid>
     </van-list>
@@ -461,7 +489,7 @@
 
     computed: {},
     created() {
-      
+
       api.shop_goods_class({}).then((res) => {
         this.tabList = [{
           class_1: "",
@@ -490,9 +518,9 @@
     },
 
     methods: {
-      toDetail(data) {
-        utils.jumpTo(`/mall/bargain-detail?bargain_id=${data.bargain_id}`)
-      },
+      // toDetail(data) {
+      //   utils.jumpTo(`/mall/bargain-detail?bargain_id=${data.bargain_id}`)
+      // },
       toDetail(item) {
         this.$router.push(`/mall/detail?goodsid=${item.goods_share_id}`)
       },
@@ -541,7 +569,15 @@
   $red: #f90250;
   $cardpad: 4vw;
 
-  .app-container {
+  .app-container.page-mall {
+    .van-search {
+      background-color: transparent;
+
+      .van-search__content {
+        background-color: #fff;
+
+      }
+    }
 
     ._nav {
       text-align: center;
@@ -562,7 +598,7 @@
 
       ._r {
         width: 9vw;
-        height: 11.73vw;
+        height: 44px;
         position: absolute;
         right: -9vw;
         top: 0;
@@ -580,8 +616,22 @@
         color: #fff;
       }
 
+      ._card-r {
+        height: 100%;
+        @include flexbox();
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+
+        ._r-b {
+          width: 100%;
+        }
+      }
+
       ._tit {
-        height: 9vw;
+        height: 9.7vw;
+        font-size: 3.5vw;
+        line-height: 5vw;
         width: 100%;
         @include textoverflow(2);
       }
@@ -593,7 +643,7 @@
 
       ._price {
         @include flexbox();
-
+        justify-content: space-between;
       }
 
       ._comp {
@@ -602,13 +652,20 @@
       }
 
       ._buy {
+        display: inline-block;
         padding: 0.5vw 1.5vw;
         background-color: $cl-oran;
         color: #fff;
+        height: 4.5vw;
+        line-height: 4.5vw;
       }
 
       .van-grid-item__content {
-        padding: 1vw 2vw;
+        padding: 2vw 2vw;
+      }
+
+      .van-grid-item__content--center {
+        align-items: flex-start;
       }
 
       .van-button {
@@ -619,6 +676,7 @@
 
     ._promo {
       padding: 2.5vw;
+      padding-bottom: 0;
       color: #c71814;
 
       ._bar {

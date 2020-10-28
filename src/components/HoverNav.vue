@@ -23,7 +23,7 @@
           alt
         > -->
         <div
-          style="width:10vw;background-color:#3333338f;color:#fff;font-size:5vw;height:10vw;"
+          style="width:10vw;background-color:#535353;color:#fff;font-size:5vw;height:10vw;"
           class="animated bor99 tc font18 _0"
         >
           <div style="height:100%;">
@@ -31,7 +31,7 @@
           </div>
         </div>
         <div
-          style="width:10vw;background-color:#3333338f;color:#fff;font-size:5vw;height:10vw;"
+          style="width:10vw;background-color:#535353;color:#fff;font-size:5vw;height:10vw;"
           class="animated bor99 tc _1"
           @click="toOuterSite('cart')"
         >
@@ -40,7 +40,7 @@
           </div>
         </div>
         <div
-          style="width:10vw;background-color:#3333338f;color:#fff;font-size:5vw;height:10vw;"
+          style="width:10vw;background-color:#535353;color:#fff;font-size:5vw;height:10vw;"
           class="animated bor99 tc _3"
           @click="toOuterSite('service')"
         >
@@ -60,7 +60,7 @@
         alt
       > -->
       <div
-        style="background-color:#3333338f;color:#fff;font-size:2.5vw;height:100%;overflow: auto;"
+        style="background-color:#535353;color:#fff;font-size:2.5vw;height:100%;overflow: hidden;"
         class="animated bor99 tc"
         :class="[{'cwRotate' :f_hoverNavFadeining === true}, {'ccwRotate':f_hoverNavFadeining === false}]"
         @click="hoverNavFade"

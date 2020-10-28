@@ -1,6 +1,19 @@
 <!-- home -->
 <template>
   <div class="app-container page-order">
+
+    <div class="m-search">
+      <van-search
+        shape="round"
+        v-model="keyword"
+        placeholder="搜索我的订单"
+        left-icon=""
+        :clearable="false"
+        @clear="clearSear"
+        @search="sear"
+      />
+    </div>
+
     <van-tabs
       @change="changeTab"
       v-model="active"
@@ -11,19 +24,10 @@
         :title="item.text"
         :name="item.val"
       >
-
       </van-tab>
     </van-tabs>
 
-    <div class="mt10">
-      <van-search
-        v-model="keyword"
-        placeholder="请输入搜索关键词"
-        :clearable="true"
-        @clear="clearSear"
-        @search="sear"
-      />
-    </div>
+
 
     <van-list
       v-model="listLoading"
@@ -41,7 +45,11 @@
         <div class="_t">
           <div class="_l">
 
-            <span>{{item.factory_name}}</span>;
+            <span>{{item.factory_name}} <img
+                style="width:1.8vw;height:3.7vw;vertical-align: -2px;"
+                src="@/assets/imgs/84.png"
+                alt=""
+              ></span>
 
           </div>
           <div class="_r cl-oran">{{item.status_desc}}</div>
@@ -65,7 +73,7 @@
               class="_p0"
               style="marginTop:0;"
             >{{goods.goods_name}}</p>
-            <p class="_p1">规格:{{goods.option_name && goods.option_name.join()}}</p>
+            <!-- <p class="_p1">规格:{{goods.option_name && goods.option_name.join()}}</p> -->
             <p class="_p2 cl-oran font10">七天无理由退换</p>
           </div>
           <div class="_r">
@@ -84,11 +92,30 @@
             <div></div>
             <div>
               <div
-                class="u-btn _btn0"
+                class="u-btn _btn0 mr10"
                 @click="btn0Click(item)"
-                v-show="item.status != 2"
-              >{{textMap[item.status].btn}}</div>
-              <div class="u-btn _btn1">查看订单</div>
+                v-show="item.status == 1"
+              >{{textMap[item.status] && textMap[item.status].btn}}</div>
+              <div
+                class="u-btn _btn0 mr10"
+                @click="toRefund(item)"
+                v-show="item.can_return"
+              >退款</div>
+              <div
+                class="u-btn fr mr10"
+                v-show="item.can_sign"
+                style="border-color:#ff7728;color:#ff7728"
+                @click="cfmOrder(item)"
+              >确认收货</div>
+              <div
+                class="u-btn _btn0 mr10"
+                @click="cancelOrder(item)"
+                v-show="item.can_cancel"
+              >取消订单</div>
+              <div
+                class="u-btn _btn1 mr10"
+                @click="$router.push(`/my/order-detail?order_no=${item.order_no}`)"
+              >查看订单</div>
             </div>
           </div>
         </div>
@@ -100,6 +127,7 @@
 <script>
   import api from '@/api/api'
   import globals from '@/utils/globals' // get token from cookie
+  import utils from '@/utils' // get token from cookie
 
   import {
     ImagePreview
@@ -177,6 +205,28 @@
     },
 
     methods: {
+      cfmOrder(item) {
+        api.order_sign({
+          order_no: item.order_no
+        }).then((res) => {
+          utils.editCb(res, () => {
+            this.changeTab()
+          })
+        })
+      },
+      cancelOrder(item) {
+
+        api.order_cancel({
+          order_no: item.order_no
+        }).then((res) => {
+          utils.editCb(res, () => {
+            this.changeTab()
+          })
+        })
+      },
+      toRefund(item) {
+        this.$router.push(`/my/refund?order_no=${item.order_no}`)
+      },
       btn0Click(item) {
         if (item.status == 1) {
           api.factory_order_pay({
@@ -346,12 +396,13 @@
           ._btn0 {}
 
           ._btn1 {
-            margin-left: 2vw;
             background: $red;
             color: #fff;
           }
         }
       }
     }
+
+
   }
 </style>

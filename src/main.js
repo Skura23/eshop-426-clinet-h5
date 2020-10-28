@@ -10,6 +10,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import '@/permission' // permission control
+import wxShare from '@/utils/wx_share.js'
 
 
 // 设置 js中可以访问 $cdn
@@ -17,6 +18,8 @@ import {
   $cdn
 } from '@/config'
 Vue.prototype.$cdn = $cdn
+// 分享
+Object.defineProperty(Vue.prototype, '$wxShare', { value: wxShare });
 
 // 全局引入按需引入UI库 vant
 // import '@/plugins/vant'

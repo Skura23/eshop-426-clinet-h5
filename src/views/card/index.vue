@@ -3,16 +3,84 @@
   <div class="app-container page-card">
     <div class="_wra0 tc ">
       <div
-        class="borr i-b ov"
-        style="font-size:0"
+        class="borr i-b ov re u-box-s"
+        style="width:91.2vw; height: 44.5vw"
       >
-        <van-image
-          width="97vw"
-          height="44.5vw"
-          fit="cover"
-          class="u-box-s "
-          :src="require('@/assets/imgs/78.png')"
-        />
+        <div
+          class="_l tc cl-gray re"
+          style="height: 100%;overflow:auto"
+        >
+          <!-- <div
+            style="font-size:10vw;margin-top:15vw;"
+            class=""
+          >+</div>
+          <div class="">上传图片</div> -->
+          <div
+            class="ab"
+            style="top:0;left:0;height: 100%;width:100%"
+          >
+            <van-image
+              width="100%"
+              height="100%"
+              fit="cover"
+              :src="dataset.image_1 || require('@/assets/imgs/75.png')"
+            />
+          </div>
+
+          
+        </div>
+        <!-- <div class="">
+          <van-uploader
+            v-model="fileList0"
+            :max-count="1"
+            :after-read="afterRead0"
+          />
+        </div> -->
+        <div
+          class="ab _r"
+          style="top:0;right:0;height: 100%;"
+        >
+          <img
+            src='@/assets/imgs/83.png'
+            class=""
+            style="height: 100%;"
+            alt=""
+          >
+          <div class="_texts0 ab">
+            <div class="">
+              <!-- <input
+                type="text"
+                placeholder="请输入姓名"
+                v-model="dataset.card_full_name"
+              > -->
+              {{dataset.card_full_name}}
+            </div>
+            <div class="mt10" style="text-align:left">
+              <!-- <input
+                class="mt10"
+                type="text"
+                placeholder="请输入职位"
+                v-model="dataset.card_position"
+              > -->
+              {{dataset.group_name}}
+            </div>
+
+          </div>
+          <div class="_texts1 ab">
+            <!-- <input
+              type="text"
+              placeholder="请输入电话号码"
+              v-model="dataset.card_phone"
+            > -->
+            {{dataset.phone}}
+          </div>
+          <!-- <van-image
+            fit="cover"
+            class="u-box-s "
+            :src="require('@/assets/imgs/1.png')"
+          /> -->
+        </div>
+
       </div>
     </div>
 
@@ -35,9 +103,9 @@
           class="mt10 _a"
           v-if="cardShowAll"
         >
-          <span>手机 13546352638</span>
+          <span>手机 {{dataset.phone}}</span>
           <span>
-            <a href="tel:13546352638">
+            <a :href='`tel:${dataset.phone}`'>
               <van-tag
                 plain
                 type="primary"
@@ -59,7 +127,10 @@
           class="borr"
           type="info"
           style="width:47%;"
-        >交换联系方式</van-button>
+          :url='`tel:${dataset.phone}`'
+        >
+          交换联系方式
+        </van-button>
       </div>
 
       <div class="_d0 mt cl-gray font12">
@@ -109,7 +180,7 @@
           </div>
           <div
             class="i-b ml"
-            @click="$router.push('/card/qr')"
+            @click="$router.push(`/card/qr?auth_code=${dataset.auth_code}`)"
           >
             <div class="_d0-r _d0-r-t">
               <van-icon name="qr" />
@@ -124,10 +195,10 @@
       <div class="_d1 mt">
         <van-image
           width="100%"
-          height="50vw"
+          height="68vw"
           fit="cover"
           radius="2.7vw"
-          :src="require('@/assets/imgs/78.png')"
+          :src="dataset.image_2 || require('@/assets/imgs/75.png')"
         />
       </div>
 
@@ -251,7 +322,7 @@
         round
         width="10vw"
         height="10vw"
-        src="https://img.yzcdn.cn/vant/cat.jpeg"
+        :src="dataset.image_1 || require('@/assets/imgs/75.png')"
       >
 
       </van-image>
@@ -271,12 +342,13 @@
       <img
         :src="posterUrl"
         alt=""
-        style="width:70vw;"
+        style="width:83vw;"
       >
       <van-button
         type="info"
         class="mb10"
-      >长按图片保存</van-button>
+        color="#ff7728"
+      >长按图片保存到本地</van-button>
     </van-popup>
 
     <wx-share-guide :show.sync="showShareGuide"></wx-share-guide>
@@ -367,6 +439,30 @@
   .app-container.page-card {
     ._wra0 {
       margin-top: 1.5vw;
+
+      ._l {
+        width: 44vw;
+        background-color: #fff;
+      }
+
+      ._r {
+        ._texts0 {
+          top: 12vw;
+          left: 12vw;
+        }
+
+        ._texts1 {
+          top: 28vw;
+          left: 28vw;
+        }
+
+        input {
+          width: 25vw;
+          background-color: transparent;
+          border: none;
+          border-bottom: 1px solid gray;
+        }
+      }
     }
 
     ._wra1 {

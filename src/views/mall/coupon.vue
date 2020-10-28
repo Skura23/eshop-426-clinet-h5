@@ -73,13 +73,14 @@
               ￥<span style="font-size:10vw">{{item.deduct}}</span>
             </div>
             <div class="_l-1 mt5">
-              {{item.content}}
+              {{item.discounts_info}}
             </div>
             <div class="_l-2 mt5">
               有效期：
             </div>
             <div class="_l-3 mt5">
-              {{item.time_start}}-{{item.time_end}}
+              <!-- {{item.time_start}}-{{item.time_end}} -->
+              {{item.period_of_validity}}
             </div>
           </div>
         </div>
@@ -92,7 +93,7 @@
             style="width:35vw;"
           >
             <div class="font20">{{item.coupon_name}}</div>
-            <div class="font12 mt10">{{item.num_info}}</div>
+            <div class="font12 mt10">{{item.content}}</div>
             <div class="mt10">
               <van-tag
                 round

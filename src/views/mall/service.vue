@@ -31,7 +31,7 @@
           class="_i "
         >
           <div class="_t bb w100">
-            <div>1:</div>
+            <div>{{item.row_num}}:</div>
             <div>
               <van-image
                 width="7.5vw"

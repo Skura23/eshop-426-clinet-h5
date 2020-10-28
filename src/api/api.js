@@ -40,6 +40,9 @@ let apiList = [
   // 登录相关
   "authorization",
   "login_by_open_id",
+  "js_api",
+  "send_bound_message|member",
+  "bound_phone|member",
 
   // 客户相关
   "member_referrer_list|member",
@@ -105,6 +108,10 @@ let apiList = [
   "order_pay|shop",
   "member_order_list|member",
   "factory_order_pay|shop",
+  "order_cancel|order",
+  "order_detail|order",
+  "order_sign|order",
+  "order_prepay_check_create|shop",
   // 砍价
   "bargain_goods_list|marketing",
   "bargain_create|marketing",
@@ -113,6 +120,7 @@ let apiList = [
   "bargain|marketing",
   "bargain_order_create|marketing",
   "bargain_order_list|marketing",
+  "bargain_order_check|marketing",
   // 秒杀
   "seckill_goods_detail|marketing",
   "going_seckill|marketing",
@@ -123,6 +131,7 @@ let apiList = [
   "member_coupon_list|member",
   // 我的
   "seckill_order_list|member",
+  "shop_member_detail|member",
   // 会员地址
   "member_receipt_address_create|member",
   "member_receipt_address|member",
@@ -140,6 +149,8 @@ let apiList = [
   "tag_like|card",
   "share_card_detail|card",
   "create_image|card",
+  "card_image|card",
+  
   //发现
   "cases_class_list|shop",
   "find_cases_list|shop",
@@ -183,7 +194,8 @@ let apiList = [
   "join_group_order_list|shop",
   "factory_request|member",
   "order_prepay_create|shop",
-  "send_phone_message"
+  "send_phone_message",
+  "member_dealer_detail|member",
 ]
 
 // 调用方法: api["class_create|integral"]
