@@ -201,7 +201,7 @@
     </div>
 
     <van-submit-bar
-      :price="params.type=='cart'?orderData.real_amount*100 : params.type=='credit'? orderData.money*100: params.type=='bargain'?orderData.amount*100:params.buyType=='prepay'?Number(orderData.prepay_amount)*100:price "
+      :price="params.type=='cart'?orderData.real_amount*100 : params.type=='credit'? orderData.money*100: params.type=='bargain'?orderData.amount*100:params.buyType=='prepay'?Number(orderData.prepay_amount)*100:Number(orderData.real_amount)*100 "
       :disabled="disabled"
       button-text="提交订单"
       :label="params.buyType=='prepay'?'预付：':'合计：'"
@@ -236,7 +236,9 @@
         remark: '',
         params: {},
         pageIsfrom: '',
-        yhRadio: 0
+        yhRadio: 0,
+        is_chose: true,
+        firstEnter:true,
       }
 
     },
@@ -269,8 +271,14 @@
         // return sum * 100
       },
       coupon_no() {
-        return (this.orderData.yh_list && this.orderData.yh_list.length > 0) && (this.orderData.yh_list[this.yhRadio] &&
-          this.orderData.yh_list[this.yhRadio].coupon_no)
+        if (this.firstEnter) {
+          return
+        }
+        let coupon_no = (this.orderData.yh_list && this.orderData.yh_list.length > 0) && (this.orderData.yh_list[this
+            .yhRadio] &&
+          this.orderData.yh_list[this.yhRadio].coupon_no);
+        this.is_chose = !!coupon_no
+        return coupon_no
       },
     },
 
@@ -279,6 +287,7 @@
         this.createdFunc()
       },
       createdFunc() {
+        
 
         // this.factory_id = this.$route.params.factory_id
         // this.cart_ids = this.$route.params.cart_ids
@@ -291,25 +300,29 @@
         console.log(params, 'params');
         this.goodsData = params
         this.goodsData.coupon_no = this.coupon_no
-        this.goodsData.num = this.orderData.goods_list?this.orderData.goods_list[0].num:1
+        this.goodsData.num = this.orderData.goods_list ? this.orderData.goods_list[0].num : 1
+        this.goodsData.is_chose = this.is_chose
         if (params.type == 'cart') {
           api.goods_cart_check({
             factory_id: params.factory_id,
             cart_id: params.cart_ids,
             coupon_no: this.coupon_no
           }).then((res) => {
+            this.firstEnter = false
             this.orderData = res.data
             this.disabled = false
             this.receiverId = res.data.receipt_address.receiver_id
           })
         } else if (params.type == 'buy' || (params.type == 'normal' && params.buyType != 'prepay')) {
           api.order_check_create(this.goodsData).then((res) => {
+            this.firstEnter = false
             this.orderData = res.data
             this.disabled = false
             this.receiverId = res.data.receipt_address.receiver_id
           })
         } else if (params.type == 'credit') {
           api.integral_order_check(this.goodsData).then((res) => {
+            this.firstEnter = false
             this.orderData = res.data
             this.orderData.goods_list = [res.data.goods]
             this.disabled = false
@@ -317,6 +330,7 @@
           })
         } else if (params.type == 'bargain') {
           api.bargain_order_check(this.goodsData).then((res) => {
+            this.firstEnter = false
             this.orderData = JSON.parse(JSON.stringify(res.data))
             this.orderData.goods_list = [res.data]
             this.disabled = false
@@ -324,12 +338,14 @@
           })
         } else if (params.buyType == 'prepay') {
           api.order_prepay_check_create(this.goodsData).then((res) => {
+            this.firstEnter = false
             this.orderData = JSON.parse(JSON.stringify(res.data))
             this.disabled = false
             this.receiverId = res.data.receipt_address.receiver_id
           })
         } else if (params.buyType == 'group') {
           api.order_group_check_create(this.goodsData).then((res) => {
+            this.firstEnter = false
             this.orderData = res.data
             this.disabled = false
             this.receiverId = res.data.receipt_address.receiver_id
