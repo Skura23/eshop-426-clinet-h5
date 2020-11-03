@@ -113,7 +113,7 @@
                 v-show="item.can_cancel"
               >取消订单</div>
               <div
-                class="u-btn _btn1 mr10"
+                class="u-btn _btn1 "
                 @click="$router.push(`/my/order-detail?order_no=${item.order_no}`)"
               >查看订单</div>
             </div>

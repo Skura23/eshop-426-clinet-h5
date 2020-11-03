@@ -47,7 +47,7 @@ export const router = [{
     name: 'card-chat',
     component: () => import('@/views/card/chat'),
     meta: {
-      title: '名片',
+      title: '聊天',
       keepAlive: false,
       noTopbar: false
     }
@@ -57,7 +57,7 @@ export const router = [{
     name: 'card-chat',
     component: () => import('@/views/card/chat2'),
     meta: {
-      title: '名片',
+      title: '聊天',
       keepAlive: false,
       noTopbar: false
     }
@@ -67,7 +67,7 @@ export const router = [{
     name: 'card-chat-list',
     component: () => import('@/views/card/chat-list'),
     meta: {
-      title: '名片',
+      title: '聊天列表',
       keepAlive: false,
       noTopbar: false
     }

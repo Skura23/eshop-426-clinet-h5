@@ -65,7 +65,7 @@
         style="border-radius:2vw;"
         color="#ff7728"
         @click="getPoster"
-      >长按保存图片</van-button>
+      >保存为图片</van-button>
     </div>
 
 

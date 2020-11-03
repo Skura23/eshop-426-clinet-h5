@@ -75,10 +75,15 @@
           name: item.address,
           id: item.id,
         })
-        this.$router.push({
-          path: '/my/settlement',
-          query: this.query
-        })
+        if (Object.keys(this.query).length > 0) {
+          this.$router.push({
+            path: '/my/settlement',
+            query: this.query
+          })
+        } else {
+          this.$router.push(`/my/address-edit?id=${item.id}`)
+        }
+
 
 
       },

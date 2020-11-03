@@ -6,6 +6,7 @@
       @click-left="onClickLeft"
       @click-right="config.onClickRight"
       :placeholder="true"
+      :fixed="true"
     >
       <template
         #right

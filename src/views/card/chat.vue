@@ -182,10 +182,11 @@
         // this.$route.meta.title = res.data.receive_nick_name
         createSocket(res.data.socket_code)
         this.msgList = res.data.list
+        this.$route.meta.title = res.data.receive_nick_name
         Vue.nextTick(function () {
           // DOM 更新了
           var div = document.getElementById('main');
-          var topTitleDom = document.getElementsByClassName('van-nav-bar__title')[0].innerHTML = res.data.receive_nick_name
+          // var topTitleDom = document.getElementsByClassName('van-nav-bar__title')[0].innerHTML = res.data.receive_nick_name
           div.scrollTop = div.scrollHeight - div.clientHeight;
         })
       })

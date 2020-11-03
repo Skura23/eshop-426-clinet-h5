@@ -22,7 +22,7 @@
             <van-image
               width="100%"
               height="100%"
-              fit="contain"
+              fit="cover"
               :src="item"
             />
           </van-swipe-item>
@@ -320,6 +320,8 @@
   import globals from '@/utils/globals' // get token from cookie
   import utils from '@/utils/index' // get token from cookie
 
+import Vue from 'vue'
+
   import api from '@/api/api'
   import {
     Toast
@@ -437,7 +439,14 @@
           prepay: 'prepay_price',
         }
 
-        this.sku.price = this.goodsdata[obj[type]]
+        if (type == 'credit') {
+          Vue.nextTick(()=> {
+            document.querySelector('.van-sku__goods-price').innerHTML = this.goodsdata.price_show
+          })
+        } else {
+          this.sku.price = this.goodsdata[obj[type]]
+
+        }
 
         let list = []
         if (this.goodsdata.is_spec == 1) {
@@ -586,9 +595,16 @@
         this.skuPopShow = true
         this.buyType = 'group'
       },
+      onClickExchange() {
+        this.showAddcartbtn = false
+        this.quota = 1
+        this.setPrice('credit')
+        this.skuPopShow = true
+      },
       toBuy(data) {
         let obj = {
           goods_share_id: this.goodsdata.goods_share_id,
+          goods_id: this.goodsdata.goods_id,
           option_id: data.selectedSkuComb.id,
           num: data.selectedNum,
           type: this.type,
@@ -694,6 +710,7 @@
     ._detail {
       img {
         width: 100%;
+        display: block;
       }
     }
 

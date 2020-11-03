@@ -4,9 +4,10 @@
     id="app"
   >
     <TopBar
-      :title="$route.meta.title"
+      :title="title"
       :name="$route.name"
       v-show="!$route.meta.noTopbar"
+      
     ></TopBar>
     <!-- <div
       class=""
@@ -42,22 +43,51 @@
       TabBar,
       TopBar
     },
+    data() {
+      return {
+        title: ''
+      }
+    },
+    watch: {
+      // '$route.meta.title'(newVal, oldVal) {
+      //   // if (newVal == 0) {
+      //   //   clearInterval(this.timer);
+      //   //   this.f_canSendCode = true;
+      //   //   this.codeTime = 60
+      //   // }
+      //   this.title = newVal
+      //   console.log(this.title, 'this.title');
+      //   setTimeout(() => {
+      //     this.$route.meta.title = 33
+      //     console.log(this.$route.meta.title, '$route.meta.title');
+      //   }, 1500);
+      // },
+    },
+    computed: {
+      // title(){
+      //   console.log(this.$route.meta.title, '$route.meta.title');
+      //   return this.$route.meta.title
+      // }
+    },
     mounted() {
-      // setTimeout(() => {
-      //   console.log(this.$route.name);
-      // }, 1000);
+      // console.log('app mounted');
+      // 监听名片聊天里导致的头部title变化
+      setInterval(() => {
+        console.log(this.$route.meta.title);
+        this.title = this.$route.meta.title
+      }, 1000);
     },
     methods: {
       // test() {
       //   this.$router.go(0)
       // },
     },
-    
+
     created() {
 
       // 设置全局分享
       this.$wxShare.wxShowMenu();
-      
+
       // 如果地址栏带code参数则加上#后重新跳转
 
       // api.authorization({
@@ -112,7 +142,7 @@
             api.wei_xin_check_login({
               root_factory_id: 1,
               wei_xin_code: obj.code,
-              referrer_id:obj.mid
+              referrer_id: obj.mid
             }).then((res) => {
               if (res.data.shop_code == 3100) {
                 console.log('this.$router.replace to login');
