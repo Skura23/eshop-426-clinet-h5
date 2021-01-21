@@ -1,13 +1,16 @@
 import axios from 'axios';
 import api from '@/api/api'
 import Cookies from 'js-cookie'
+import globals from '@/utils/globals' // get token from cookie
+
+
 
 // Cookies.get('eshop-426-client-h5_userinfo').open_id
 
 export default {
 
   wxShowMenu: function (info) {
-    console.log(0.19);
+    console.log(0.24);
     // wx.hideOptionMenu();
     wx.hideMenuItems({
       menuList: [
@@ -23,11 +26,20 @@ export default {
 
       desc: "复活工厂，颠覆消费", //分享描述
 
-      link: location.origin + location.pathname, // 分享链接
+      // link: location.origin + location.pathname, // 分享链接
+      link: location.href, // 分享链接
+      
 
-      imgUrl: 'http://crm.metujia.com/uploads/images/20-10-23/2e58a4256c3baf34ce196c1d81876009.png' // 分享图标
+      imgUrl: `${globals.curBaseUrl}/h5/static/img/1.860b8c69.png` // 分享图标
     }
-    info.link += `?mid=${Cookies.get('eshop-426-client-h5_userinfo') && Cookies.get('eshop-426-client-h5_userinfo').member_id}`
+    let mid = Cookies.get('eshop-426-client-h5_userinfo') && JSON.parse(Cookies.get('eshop-426-client-h5_userinfo')).member_id
+    if (info.link.indexOf('?')!=-1) {
+      info.link += `&mid=${mid}`
+    }else{
+      info.link += `?mid=${mid}`
+    }
+    
+    console.log(Cookies.get('eshop-426-client-h5_userinfo'),info, "Cookies.get('eshop-426-client-h5_userinfo')");
     // alert(location.origin+location.pathname+`?mid=${g.mid}`)
     // alert(location.href.split('#')[0])
     api.js_api({

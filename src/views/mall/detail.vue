@@ -238,7 +238,7 @@
         />
       </template>
 
-      <template v-if="type=='credit'">
+      <template v-else-if="type=='credit'">
         <van-goods-action-button
           type="danger"
           text="立即兑换"
@@ -320,7 +320,7 @@
   import globals from '@/utils/globals' // get token from cookie
   import utils from '@/utils/index' // get token from cookie
 
-import Vue from 'vue'
+  import Vue from 'vue'
 
   import api from '@/api/api'
   import {
@@ -424,6 +424,25 @@ import Vue from 'vue'
         this.goodsdata = res.data
         this.goods.picture = this.goodsdata.goods_image[0]
         this.rebuildSpec()
+        if (this.goodsdata.is_group==1) {
+          this.type = 'group'
+        }
+        // if (goodsdata.is_prepay==1) {
+        //   this.type = 'group'
+        // }
+
+        // 设置详情分享
+        setTimeout(() => {
+          console.log(location.href, 'location.href');
+          // 设置全局分享
+          this.$wxShare.wxShowMenu({
+            title: this.goodsdata.goods_name, // 分享标题
+            desc: "复活工厂，颠覆消费", //分享描述
+            // link: location.origin + location.pathname, // 分享链接
+            link: location.href, // 分享链接
+            imgUrl: this.goodsdata.goods_image[0] // 分享图标
+          });
+        }, 200);
       })
 
 
@@ -440,7 +459,7 @@ import Vue from 'vue'
         }
 
         if (type == 'credit') {
-          Vue.nextTick(()=> {
+          Vue.nextTick(() => {
             document.querySelector('.van-sku__goods-price').innerHTML = this.goodsdata.price_show
           })
         } else {

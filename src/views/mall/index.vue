@@ -1,31 +1,56 @@
 <!-- home -->
 <template>
   <div class="app-container page-order page-mall">
-    <div class="">
-      <van-search
-        v-model="keyword"
-        placeholder="搜索你感兴趣的商品"
-        :clearable="true"
-        @clear="clearSear"
-        @search="sear"
-        shape="round"
-      />
+
+    <div
+      class=""
+      style="background-color: #FD8642"
+    >
+      <p
+        class="cl-whi pd3"
+        style="padding-bottom: 0;"
+      >低价买 放心购！</p>
+      <div class="">
+        <van-search
+          v-model="keyword"
+          placeholder="搜索你感兴趣的商品    "
+          :clearable="true"
+          @clear="clearSear"
+          @search="sear"
+          shape="round"
+        />
+      </div>
     </div>
 
-    <van-swipe
-      class="my-swipe mt10"
-      indicator-color="#ff7728"
-      height="70vw"
-    >
-      <van-swipe-item>
-        <van-image
-          width="100%"
-          height="100%"
-          fit="cover"
-          :src="require('@/assets/imgs/85.png')"
-        />
-      </van-swipe-item>
-      <!-- <van-swipe-item>
+
+
+    <div class="re ov">
+      <div
+        class="ab"
+        style="width:100vw;left:0;top:0;"
+      >
+        <img
+          :src="require('@/assets/imgs/127.png')"
+          class="w100"
+          alt=""
+        >
+      </div>
+      <van-swipe
+        class="my-swipe  "
+        style="margin:2vw;"
+        indicator-color="#ff7728"
+        height="70vw"
+      >
+
+        <van-swipe-item class="">
+          <van-image
+            width="100%"
+            height="100%"
+            fit="cover"
+            :src="require('@/assets/imgs/114.png')"
+          />
+        </van-swipe-item>
+        <!-- <van-swipe-item>
         <van-image
           width="100%"
           height="100%"
@@ -34,19 +59,32 @@
         />
       </van-swipe-item> -->
 
-    </van-swipe>
+      </van-swipe>
+    </div>
+
+
+    <div style="margin:2vw;">
+      <van-image
+        width="100%"
+        :src="require('@/assets/imgs/115.png')"
+      />
+    </div>
+
 
     <div class="_nav">
       <div
         class="_i"
         @click="$router.push('/mall/hotgroup')"
       >
+        <div class="ab font10 _num">
+          {{iconNums.tuan_gou}}
+        </div>
         <div>
           <van-image
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/16.png')"
+            :src="require('@/assets/imgs/116.png')"
           />
         </div>
         <div class="">
@@ -57,12 +95,18 @@
         class="_i"
         @click="$router.push('/mall/bargain')"
       >
+        <div
+          class="ab font10 _num"
+          style="right: -4.5vw;"
+        >
+          大额
+        </div>
         <div>
           <van-image
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/17.png')"
+            :src="require('@/assets/imgs/123.png')"
           />
         </div>
         <div class="">
@@ -73,12 +117,15 @@
         class="_i"
         @click="$router.push('/mall/seckill')"
       >
+        <div class="ab font10 _num">
+          {{iconNums.miao_sha}}
+        </div>
         <div>
           <van-image
             width="10.3vw"
             height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/20.png')"
+            fit="contain"
+            :src="require('@/assets/imgs/122.png')"
           />
         </div>
         <div class="">
@@ -89,12 +136,15 @@
         class="_i"
         @click="$router.push('/mall/union')"
       >
+        <div class="ab font10 _num">
+          {{iconNums.lian_meng}}
+        </div>
         <div>
           <van-image
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/19.png')"
+            :src="require('@/assets/imgs/121.png')"
           />
         </div>
         <div class="">
@@ -112,8 +162,8 @@
           <van-image
             width="10.3vw"
             height="10.3vw"
-            fit="cover"
-            :src="require('@/assets/imgs/18.png')"
+            fit="contain"
+            :src="require('@/assets/imgs/120.png')"
           />
         </div>
         <div class="">
@@ -124,12 +174,15 @@
         class="_i"
         @click="$router.push('/mall/coupon')"
       >
+        <div class="ab font10 _num">
+          领
+        </div>
         <div>
           <van-image
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/20.png')"
+            :src="require('@/assets/imgs/119.png')"
           />
         </div>
         <div class="">
@@ -138,34 +191,36 @@
       </div>
       <div
         class="_i"
-        style="opacity:0"
+        style=""
+        @click="$router.push('/credit/index')"
       >
         <div>
           <van-image
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/20.png')"
+            :src="require('@/assets/imgs/118.png')"
           />
         </div>
         <div class="">
-          领优惠券
+          积分商城
         </div>
       </div>
       <div
         class="_i"
-        style="opacity:0"
+        style=""
+        @click="$router.push('/my/checkin')"
       >
         <div>
           <van-image
             width="10.3vw"
             height="10.3vw"
             fit="cover"
-            :src="require('@/assets/imgs/20.png')"
+            :src="require('@/assets/imgs/117.png')"
           />
         </div>
         <div class="">
-          领优惠券
+          每日任务
         </div>
       </div>
     </div>
@@ -173,13 +228,12 @@
     <div>
       <van-image
         width="100%"
-        height="35vw"
         fit="cover"
-        :src="require('@/assets/imgs/78.png')"
+        :src="require('@/assets/imgs/124.png')"
       />
     </div>
 
-    <van-tabs
+    <!-- <van-tabs
       @change="changeTab"
       v-model="active"
       class="_tabs"
@@ -201,10 +255,13 @@
         :name="item.class_1"
       >
       </van-tab>
-    </van-tabs>
+    </van-tabs> -->
 
     <!-- 砍价 秒杀 -->
-    <div class="_promo mt10">
+    <!-- <div
+      class="_promo mt10 mb"
+      v-if="curbargains || seckillList[0]"
+    >
 
 
       <div
@@ -356,7 +413,107 @@
 
         </div>
       </div>
+    </div> -->
+
+    <!-- 活动 -->
+    <div class="m-card _promos ">
+      <div class="_c1">
+        <van-card
+          :desc="'一 切 只 为 安 全'"
+          :title="curGrouppromo.goods_name"
+          :thumb="curGrouppromo.goods_image[0]"
+          @click="$router.push(`/mall/detail?type=group&goodsid=${curGrouppromo.goods_share_id}`)"
+        >
+          <template #tags>
+            <van-tag
+              round
+              color="#FB8996"
+              type="primary"
+              class="font12"
+            >点 击 更 多 拼 团</van-tag>
+          </template>
+          <template #price>
+            <div class="clearfix w100 font16">
+              <div
+                class="fl  bold"
+                style="color:#FF0000;"
+              >
+                ¥{{curGrouppromo.price}}
+              </div>
+              <div class="fr">
+                <van-button
+                  type="info"
+                  color="#FF0000"
+                  size="mini"
+                >拼团</van-button>
+              </div>
+            </div>
+          </template>
+        </van-card>
+      </div>
+      <div class="_c2 mt">
+        <div class="">
+          每日秒杀
+          <van-tag
+            round
+            color="#FB8996"
+            type="primary"
+            class="font12"
+          >每日秒杀等你来</van-tag>
+        </div>
+        <div
+          class="mt tc"
+          v-if="seckillList[0]"
+        >
+          <van-row gutter="15">
+            <van-col span="8" @click="$router.push(`/mall/detail?type=seckill&goodsid=${seckillList[0].goods_id}`)">
+              <van-image
+                width="100%"
+                height="23vw"
+                fit="contain"
+                :src="seckillList[0].goods_image[0]"
+              />
+              <div class="font16 mt10" style="color:#FF0000;">
+                ¥{{curGrouppromo.price}}
+              </div>
+              <div class="mt10">
+                <van-button
+                  type="info"
+                  color="#FF0000"
+                  size="mini"
+                >秒杀</van-button>
+              </div>
+            </van-col>
+            <van-col
+              span="8"
+              v-if="seckillList[1]"
+              @click="$router.push(`/mall/detail?type=seckill&goodsid=${seckillList[1].goods_id}`)"
+            >
+              <van-image
+                width="100%"
+                height="23vw"
+                fit="contain"
+                :src="seckillList[1].goods_image[0]"
+              />
+            </van-col>
+            <van-col
+              span="8"
+              v-if="seckillList[2]"
+              @click="$router.push(`/mall/detail?type=seckill&goodsid=${seckillList[2].goods_id}`)"
+            >
+              <van-image
+                width="100%"
+                height="23vw"
+                fit="contain"
+                :src="seckillList[2].goods_image[0]"
+              />
+            </van-col>
+          </van-row>
+        </div>
+      </div>
+
     </div>
+
 
     <van-list
       v-model="listLoading"
@@ -364,16 +521,17 @@
       finished-text="暂无更多数据"
       error-text="请求失败，点击重新加载"
       @load="loadList"
-      class="mt"
+      class=""
     >
       <van-grid
         column-num="1"
         gutter="2.5vw"
+        :border="false"
         class=""
         direction="horizontal"
       >
         <van-grid-item
-          class="_card re"
+          class="_card re bb"
           v-for="(item, index) in dataList"
           :key="index"
           @click="toDetail(item)"
@@ -472,7 +630,7 @@
   export default {
     data() {
       return {
-        curbargains: [],
+        curGrouppromo: {},
         seckillList: [],
         tabList: [],
         active: '',
@@ -482,7 +640,8 @@
         total: 0,
         listLoading: false,
         listFinished: false,
-        seckillList: []
+        seckillList: [],
+        iconNums: {}
       }
 
     },
@@ -490,6 +649,9 @@
     computed: {},
     created() {
 
+      api.shop_goods_index({}).then((res) => {
+        this.iconNums = res
+      })
       api.shop_goods_class({}).then((res) => {
         this.tabList = [{
           class_1: "",
@@ -498,11 +660,17 @@
 
       })
 
-      api.going_bargain({}).then((res) => {
+      // api.going_bargain({}).then((res) => {
 
-        this.curbargains = res.data
-        // this.countTime = this.curbargains.end_time * 1000 - (+new Date())
+      //   this.curbargains = res.data
+      //   // this.countTime = this.curbargains.end_time * 1000 - (+new Date())
+      // })
+      api.shop_goods({
+        is_group: 1
+      }).then((res) => {
+        this.curGrouppromo = res.data.list[0]
       })
+
 
       api.going_seckill({
         page: this.page
@@ -570,6 +738,22 @@
   $cardpad: 4vw;
 
   .app-container.page-mall {
+    background-color: #fff;
+
+    input::-webkit-input-placeholder {
+      text-align: center;
+    }
+
+    ._nav {
+      .van-image {
+        display: inline-block;
+      }
+    }
+
+    .van-image {
+      display: block;
+    }
+
     .van-search {
       background-color: transparent;
 
@@ -580,14 +764,25 @@
     }
 
     ._nav {
+      // background-color: #F9E1E3;
       text-align: center;
       padding: 8.7vw 3.2vw 8vw 3.2vw;
       @include flexbox();
       justify-content: space-around;
 
-      ._i {}
+      ._i {
+        position: relative;
+
+        ._num {
+          position: absolute;
+          color: #ff7728;
+          top: 0;
+          right: -2.5vw;
+        }
+      }
 
       &._nav2 {
+        // background-color: #F9E1E3;
         padding-top: 0vw;
       }
     }
@@ -661,7 +856,7 @@
       }
 
       .van-grid-item__content {
-        padding: 2vw 2vw;
+        padding: 2vw 0;
       }
 
       .van-grid-item__content--center {
@@ -769,6 +964,24 @@
             }
           }
         }
+      }
+    }
+
+    ._promos {
+      margin: 6.6vw;
+      width: auto;
+      border-radius: 0;
+    }
+
+    .van-card {
+      background-color: transparent;
+
+      .van-card__price {
+        display: block;
+      }
+
+      .van-card__title {
+        font-size: 16px;
       }
     }
   }

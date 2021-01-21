@@ -29,7 +29,7 @@
           <div
             class="_l _d"
             v-show="firstTwo[0].goods_name"
-            @click="$router.push(`/mall/detail?type=seckill&goods_id=${firstTwo[0].goods_id}`)"
+            @click="$router.push(`/mall/detail?type=seckill&goodsid=${firstTwo[0].goods_id}`)"
           >
             <div
               class="_time "
@@ -68,7 +68,7 @@
           <div
             class="_r _d"
             v-show="firstTwo[1].goods_name"
-            @click="$router.push(`/mall/detail?type=seckill&goods_id=${firstTwo[1].goods_id}`)"
+            @click="$router.push(`/mall/detail?type=seckill&goodsid=${firstTwo[1].goods_id}`)"
           >
             <div
               class="_time "

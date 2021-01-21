@@ -1,6 +1,6 @@
 <!-- home -->
 <template>
-  <div class="app-container page-order">
+  <div class="app-container page-order page-mall">
     <van-tabs
       @change="changeTab"
       v-model="active"

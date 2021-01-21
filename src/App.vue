@@ -7,7 +7,6 @@
       :title="title"
       :name="$route.name"
       v-show="!$route.meta.noTopbar"
-      
     ></TopBar>
     <!-- <div
       class=""
@@ -125,13 +124,14 @@
 
       let loginProcess = () => {
         let href = window.location.href;
-        if (href.includes("?code")) {
+        if (href.includes("code=")) {
           let arr = href.split('?')
 
           // 如果无#, 重新跳转到带#地址
           if (!arr[0].includes("#")) {
             arr[0] = arr[0] + '#'
-            let url = location.origin + location.pathname + '#' + location.search
+            let pathname = location.pathname.replace('/h5/h5', '/h5/#')
+            let url = location.origin + pathname + location.search
 
             window.location.href = url
           } else {
@@ -142,7 +142,7 @@
             api.wei_xin_check_login({
               root_factory_id: 1,
               wei_xin_code: obj.code,
-              referrer_id: obj.mid
+              referrer_id: Cookies.get('eshop-426-client-h5_authorization-mid') || obj.mid
             }).then((res) => {
               if (res.data.shop_code == 3100) {
                 console.log('this.$router.replace to login');
@@ -150,12 +150,22 @@
               } else {
                 // 登陆成功
                 setToken(res.data.response.token)
-                console.log(res.data, 'wei_xin_check_login');
+                console.log(obj, res.data, 'wei_xin_check_login');
                 // alert(JSON.stringify(res.data))
                 Cookies.set('eshop-426-client-h5_userinfo', {
                   ...res.data.response,
                   open_id: res.data.response.open_id
                 })
+                console.log(Cookies.get('eshop-426-client-h5_authorization-mid'),
+                  "Cookies.get('eshop-426-client-h5_authorization-mid')");
+                Cookies.get('eshop-426-client-h5_authorization-mid') && Cookies.remove(
+                  'eshop-426-client-h5_authorization-mid')
+                let url = Cookies.get('eshop-426-client-h5_authorization-url')
+                if (url) {
+                  Cookies.remove('eshop-426-client-h5_authorization-url')
+                  window.location.href = url
+                }
+
                 this.$wxShare.wxShowMenu();
                 // 获取token后刷新页面, 否则会出现其他接口无token异步执行的问题
                 this.$router.go(0)
@@ -165,11 +175,18 @@
           }
 
         } else {
+          let mid = utils.param2Obj(href).mid
           api.authorization({
-            redirect_uri: '/mall',
+            // redirect_uri: '/mall',
+            redirect_uri: location.href.replace(location.origin, ''),
             root_factory_id: 1,
           }).then((res) => {
-            let url = res.data.url
+            let url = res.data.url + `&mid=${mid}`
+            // mid分两种情况, 一种走authorization, 一种不走, 前者下, 先保存mid到本地, 再在wei_xin_check_login里移除
+            // 保存推荐人id到本地, 解决authorization后跳转mid丢失的问题
+            Cookies.set('eshop-426-client-h5_authorization-mid', mid)
+            Cookies.set('eshop-426-client-h5_authorization-url', location.href)
+            console.log(url, 'authorization', 1);
             // url = url.replace('crm.metujia.com', '127.0.0.1:9020')
             window.location.href = url
           })

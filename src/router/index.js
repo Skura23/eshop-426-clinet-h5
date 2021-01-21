@@ -494,6 +494,16 @@ export const router = [{
     }
   },
   {
+    path: '/homepage2',
+    name: 'homepage2',
+    component: () => import('@/views/homepage2'),
+    meta: {
+      title: '官网',
+      keepAlive: false,
+      noTopbar: true
+    }
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login'),

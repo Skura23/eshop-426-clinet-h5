@@ -150,7 +150,7 @@
             @click="jumpTo('bussi')"
           >
             <img
-              src="@/assets/imgs/29.png"
+              src="@/assets/imgs/138.png"
               alt=""
             >
             <div class="mt5">创业中心</div>
@@ -160,7 +160,7 @@
             @click="jumpTo('bargain')"
           >
             <img
-              src="@/assets/imgs/30.png"
+              src="@/assets/imgs/123.png"
               alt=""
             >
             <div class="mt5">我的砍价</div>
@@ -170,7 +170,7 @@
             @click="jumpTo('seckill')"
           >
             <img
-              src="@/assets/imgs/31.png"
+              src="@/assets/imgs/122.png"
               alt=""
             >
             <div class="mt5">我的秒杀</div>
@@ -180,7 +180,7 @@
             @click="jumpTo('group')"
           >
             <img
-              src="@/assets/imgs/32.png"
+              src="@/assets/imgs/116.png"
               alt=""
             >
             <div class="mt5">我的拼团</div>
@@ -193,7 +193,7 @@
             @click="jumpTo('credit')"
           >
             <img
-              src="@/assets/imgs/33.png"
+              src="@/assets/imgs/118.png"
               alt=""
             >
             <div class="mt5">积分商城</div>
@@ -203,7 +203,7 @@
             @click="jumpTo('checkin')"
           >
             <img
-              src="@/assets/imgs/34.png"
+              src="@/assets/imgs/117.png"
               alt=""
             >
             <div class="mt5">每日任务</div>
@@ -213,7 +213,7 @@
             @click="jumpTo('cart')"
           >
             <img
-              src="@/assets/imgs/36.png"
+              src="@/assets/imgs/143.png"
               alt=""
             >
             <div class="mt5">购物车</div>
@@ -223,7 +223,7 @@
             @click="jumpTo('coupon')"
           >
             <img
-              src="@/assets/imgs/35.png"
+              src="@/assets/imgs/119.png"
               alt=""
             >
             <div class="mt5">优惠券</div>
@@ -355,7 +355,7 @@
             @click="jumpTo('book')"
           >
             <img
-              src="@/assets/imgs/38.png"
+              src="@/assets/imgs/139.png"
               alt=""
             >
             <div class="mt5">我的收藏</div>
@@ -365,7 +365,7 @@
             @click="jumpTo('address')"
           >
             <img
-              src="@/assets/imgs/39.png"
+              src="@/assets/imgs/140.png"
               alt=""
             >
             <div class="mt5">收货地址</div>
@@ -375,7 +375,7 @@
             @click="jumpToServ"
           >
             <img
-              src="@/assets/imgs/37.png"
+              src="@/assets/imgs/141.png"
               alt=""
             >
             <div class="mt5">客服咨询</div>
@@ -385,7 +385,7 @@
             @click="$router.push(`/others/shopapply`)"
           >
             <img
-              src="@/assets/imgs/82.png"
+              src="@/assets/imgs/142.png"
               alt=""
             >
             <div class="mt5">开店申请</div>

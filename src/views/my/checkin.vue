@@ -169,7 +169,7 @@
 
     <div class="mt"></div>
 
-    <div class="_d3 bac-whi mb">
+    <!-- <div class="_d3 bac-whi mb">
       <div class="tc">
         <img
           src="@/assets/imgs/52.png"
@@ -214,7 +214,7 @@
 
         </van-tab>
       </van-tabs>
-    </div>
+    </div> -->
   </div>
 </template>
 

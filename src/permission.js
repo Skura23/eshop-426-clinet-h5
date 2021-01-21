@@ -1,14 +1,18 @@
 import router from './router'
 import store from './store'
+import wxShare from '@/utils/wx_share.js'
+
 // import { Message } from 'element-ui'
-import { getToken } from '@/utils/auth' // get token from cookie
+import {
+  getToken
+} from '@/utils/auth' // get token from cookie
 // import getPageTitle from '@/utils/get-page-title'
 
 // NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // start progress bar
   // NProgress.start()
 
@@ -18,8 +22,12 @@ router.beforeEach(async(to, from, next) => {
   // determine whether the user has logged in
   const hasToken = getToken()
 
+
+
   console.log(to.path, 'to.path');
-  if(to.path.includes('/credit')){
+
+
+  if (to.path.includes('/credit')) {
     store.commit('setTabType', 'credit')
   } else {
     store.commit('setTabType', 'normal')
@@ -28,11 +36,13 @@ router.beforeEach(async(to, from, next) => {
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next({ path: '/' })
+      next({
+        path: '/'
+      })
       // NProgress.done()
       // next()
     } else {
-      
+
       // const hasGetUserInfo = store.getters.name
       // if (hasGetUserInfo) {
       //   next()
@@ -73,7 +83,17 @@ router.beforeEach(async(to, from, next) => {
 
 })
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
   // finish progress bar
   // NProgress.done()
+  // detail页不走全局, 在detail页内自定义
+  console.log(to, 'afterEach');
+  if (!(to.path == '/mall/detail')) {
+    setTimeout(() => {
+      console.log(location.href, 'location.href');
+      // 设置全局分享
+      wxShare.wxShowMenu();
+    }, 200);
+  }
+
 })

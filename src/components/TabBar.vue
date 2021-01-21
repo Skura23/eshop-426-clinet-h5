@@ -15,30 +15,45 @@
           icon="shop-o"
         >
           商城
+          <template #icon="props">
+      <img :src="props.active ? require('@/assets/imgs/129.png') : require('@/assets/imgs/128.png')" />
+    </template>
         </van-tabbar-item>
         <van-tabbar-item
           to="/card"
           icon="idcard"
         >
           名片
+          <template #icon="props">
+      <img :src="props.active ? require('@/assets/imgs/131.png') : require('@/assets/imgs/130.png')" />
+    </template>
         </van-tabbar-item>
         <van-tabbar-item
           to="/find"
           icon="eye-o"
         >
           发现
+          <template #icon="props">
+      <img :src="props.active ? require('@/assets/imgs/133.png') : require('@/assets/imgs/132.png')" />
+    </template>
         </van-tabbar-item>
         <van-tabbar-item
-          to="/homepage"
+          to="/homepage2"
           icon="browsing-history-o"
         >
           官网
+          <template #icon="props">
+      <img :src="props.active ? require('@/assets/imgs/135.png') : require('@/assets/imgs/134.png')" />
+    </template>
         </van-tabbar-item>
         <van-tabbar-item
           to="/my"
           icon="user-o"
         >
           我的
+          <template #icon="props">
+      <img :src="props.active ? require('@/assets/imgs/137.png') : require('@/assets/imgs/136.png')" />
+    </template>
         </van-tabbar-item>
       </van-tabbar>
     </div>

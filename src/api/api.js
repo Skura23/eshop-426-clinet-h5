@@ -196,6 +196,7 @@ let apiList = [
   "order_prepay_create|shop",
   "send_phone_message",
   "member_dealer_detail|member",
+  "shop_goods_index|shop",
 ]
 
 // 调用方法: api["class_create|integral"]
